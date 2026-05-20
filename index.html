@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages/landing.css">
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.453.0/dist/umd/lucide.min.js"></script>
 </head>
 <body id="top" class="landing">
   <header class="ld-nav">
@@ -522,7 +522,7 @@
         else if (e.key === 'ArrowRight') go(1);
       });
     })();
-    lucide.createIcons();
+    if (window.lucide) { try { lucide.createIcons(); } catch(e) {} }
   </script>
 </body>
 </html>
