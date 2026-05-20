@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Đăng ký — QLTC</title>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/auth.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="auth-body">
+  <div class="auth-wrap">
+    <aside class="auth-side">
+      <a href="index.html" class="ld-brand"><img class="brand-full" src="assets/images/brand.png" alt="QLTC" onload="this.parentElement.classList.add('has-brand-full')" onerror="this.remove()" /><span class="brand-mark">₫</span><span class="brand-text">QLTC</span></a>
+      <div class="auth-quote">
+        <h2>Bắt đầu hành trình<br>tài chính của bạn.</h2>
+        <p>Miễn phí mãi mãi. Không thẻ tín dụng. Không quảng cáo.</p>
+      </div>
+      <ul class="check-list">
+        <li><i data-lucide="check-circle"></i>Theo dõi không giới hạn giao dịch</li>
+        <li><i data-lucide="check-circle"></i>Đặt mục tiêu & ngân sách</li>
+        <li><i data-lucide="check-circle"></i>Báo cáo trực quan</li>
+        <li><i data-lucide="check-circle"></i>Dữ liệu lưu cục bộ, riêng tư tuyệt đối</li>
+      </ul>
+    </aside>
+    <main class="auth-main">
+      <div class="auth-form">
+        <h1>Tạo tài khoản</h1>
+        <p class="text-secondary" style="margin-bottom: var(--s-6);">Chỉ mất 30 giây — bắt đầu quản lý tài chính ngay.</p>
+        <form id="signup-form">
+          <div class="form-field">
+            <label class="form-label">Họ và tên</label>
+            <input class="input" id="name" placeholder="Nguyễn Văn A" required />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Email</label>
+            <input class="input" id="email" type="email" placeholder="ban@example.com" required />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Mật khẩu</label>
+            <div class="pw-wrap">
+              <input class="input" id="password" type="password" placeholder="Tối thiểu 6 ký tự" required minlength="6" />
+              <button type="button" class="pw-toggle" id="pw-toggle"><i data-lucide="eye"></i></button>
+            </div>
+            <span class="form-hint">Mật khẩu mạnh giúp bảo vệ tài khoản của bạn</span>
+          </div>
+          <label class="flex" style="align-items:flex-start;gap:var(--s-2);font-size:var(--fs-sm);margin-bottom:var(--s-4);">
+            <input type="checkbox" required style="margin-top:3px;" />
+            <span>Tôi đồng ý với <span style="color:var(--color-primary);font-weight:600">Điều khoản dịch vụ</span> và <span style="color:var(--color-primary);font-weight:600">Chính sách bảo mật</span></span>
+          </label>
+          <button class="btn btn-primary btn-block btn-lg" type="submit">Tạo tài khoản</button>
+          <p class="text-center text-secondary fs-sm" style="margin-top: var(--s-5);">
+            Đã có tài khoản? <a href="login.html" style="color:var(--color-primary);font-weight:600;">Đăng nhập</a>
+          </p>
+        </form>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="js/pages/signup.js"></script>
+</body>
+</html>

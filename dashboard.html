@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tổng quan — QLTC</title>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/locale/vi.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/plugin/relativeTime.js"></script>
+  <script>if(typeof dayjs!=='undefined'){dayjs.locale('vi');dayjs.extend(dayjs_plugin_relativeTime);}</script>
+</head>
+<body>
+  <section id="page-dashboard">
+    <div class="page-header">
+      <div>
+        <h1 id="welcome-title">Chào mừng trở lại 👋</h1>
+        <div class="subtitle" id="welcome-insight">Đây là bức tranh tài chính của bạn hôm nay</div>
+      </div>
+      <div class="flex">
+        <button class="btn btn-secondary" id="btn-month"><i data-lucide="calendar"></i><span>Tháng này</span></button>
+        <a href="transactions.html" class="btn btn-primary"><i data-lucide="plus"></i><span>Thêm giao dịch</span></a>
+      </div>
+    </div>
+
+    <div id="hero-card"></div>
+    <div class="grid grid-mini" id="mini-cards"></div>
+
+    <div class="grid grid-main" style="margin-top: var(--s-6);">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Thu chi 30 ngày qua</div>
+            <div class="card-subtitle">Biến động dòng tiền theo ngày</div>
+          </div>
+          <div class="segmented" id="trend-range">
+            <button data-range="7" class="">7N</button>
+            <button data-range="30" class="is-active">30N</button>
+            <button data-range="90">90N</button>
+          </div>
+        </div>
+        <div style="height: 280px; position: relative;">
+          <canvas id="chart-trend"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Cơ cấu chi tiêu</div>
+            <div class="card-subtitle">Theo danh mục</div>
+          </div>
+        </div>
+        <div style="height: 280px; position: relative;">
+          <canvas id="chart-donut"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-main" style="margin-top: var(--s-6);">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Hoạt động gần đây</div>
+          <a href="transactions.html" class="btn btn-ghost btn-sm">Xem tất cả <i data-lucide="arrow-right"></i></a>
+        </div>
+        <div id="activity-feed" class="activity-feed"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Mục tiêu nổi bật</div>
+          <a href="goals.html" class="btn btn-ghost btn-sm">Tất cả <i data-lucide="arrow-right"></i></a>
+        </div>
+        <div id="top-goals" class="flex-col"></div>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="js/pages/dashboard.js"></script>
+</body>
+</html>

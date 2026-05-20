@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+node-portable/
+
+# Temp / build artifacts
+scripts/_*.js
+assets/images/demo/_*.png
+*.log
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Local env / secrets
+.env
+.env.local

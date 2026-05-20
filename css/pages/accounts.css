@@ -1,0 +1,33 @@
+/* accounts.css */
+.wallet-card {
+  padding: var(--s-5);
+  color: white;
+  border-radius: var(--r-lg);
+  background: linear-gradient(135deg, var(--w-color, #4F46E5), color-mix(in srgb, var(--w-color, #4F46E5) 70%, black));
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-height: 180px;
+  border: none;
+}
+.wallet-card::after {
+  content: ""; position: absolute; right: -40px; bottom: -40px;
+  width: 160px; height: 160px; border-radius: 50%; background: rgba(255,255,255,.08);
+}
+.wallet-card .w-head { display: flex; align-items: center; justify-content: space-between; }
+.wallet-card .w-icon { width: 40px; height: 40px; border-radius: var(--r-md); background: rgba(255,255,255,.18); display: grid; place-items: center; }
+.wallet-card .w-icon [data-lucide] { width: 20px; height: 20px; }
+.wallet-card .w-name { font-size: var(--fs-sm); opacity: .85; }
+.wallet-card .w-balance { font-size: var(--fs-2xl); font-weight: 700; }
+.wallet-card .w-type { font-size: var(--fs-xs); opacity: .8; }
+.wallet-card .w-actions { display: flex; gap: var(--s-2); margin-top: auto; position: relative; z-index: 1; }
+.wallet-card .w-actions .btn { background: rgba(255,255,255,.18); color: white; border: none; }
+.wallet-card .w-actions .btn:hover { background: rgba(255,255,255,.28); }
+.wallet-pick { display: flex; gap: var(--s-2); flex-wrap: wrap; margin-bottom: var(--s-4); }
+.wallet-pick button {
+  padding: var(--s-2) var(--s-3); border-radius: var(--r-md);
+  border: 1px solid var(--border-default); background: var(--bg-surface); color: var(--text-secondary); font-weight: 500;
+}
+.wallet-pick button.is-active { background: var(--color-primary); color: white; border-color: var(--color-primary); }

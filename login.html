@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Đăng nhập — QLTC</title>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/auth.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="auth-body">
+  <div class="auth-wrap">
+    <aside class="auth-side">
+      <a href="index.html" class="ld-brand"><img class="brand-full" src="assets/images/brand.png" alt="QLTC" onload="this.parentElement.classList.add('has-brand-full')" onerror="this.remove()" /><span class="brand-mark">₫</span><span class="brand-text">QLTC</span></a>
+      <div class="auth-quote">
+        <h2>Tài chính khỏe mạnh<br>bắt đầu từ thói quen.</h2>
+        <p>Ghi chép mỗi ngày, đặt mục tiêu mỗi tháng, đạt được tự do tài chính từng năm.</p>
+      </div>
+      <div class="auth-side-deco">
+        <div class="deco-card">
+          <div class="text-muted fs-sm">Tiết kiệm tháng này</div>
+          <div style="font-size:var(--fs-2xl);font-weight:700;color:var(--color-success)">+ 4.250.000 ₫</div>
+        </div>
+      </div>
+    </aside>
+    <main class="auth-main">
+      <div class="auth-form">
+        <h1>Đăng nhập</h1>
+        <p class="text-secondary" style="margin-bottom: var(--s-6);">Chào mừng trở lại! Hãy đăng nhập để tiếp tục.</p>
+        <form id="login-form">
+          <div class="form-field">
+            <label class="form-label">Email</label>
+            <input class="input" id="email" type="email" placeholder="ban@example.com" required />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Mật khẩu</label>
+            <div class="pw-wrap">
+              <input class="input" id="password" type="password" placeholder="••••••••" required minlength="6" />
+              <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Hiện mật khẩu"><i data-lucide="eye"></i></button>
+            </div>
+          </div>
+          <div class="flex-between" style="margin-bottom: var(--s-4);">
+            <label class="flex" style="align-items:center;gap:var(--s-2);font-size:var(--fs-sm);">
+              <input type="checkbox" checked /> Ghi nhớ tôi
+            </label>
+            <span class="text-primary fs-sm" style="color:var(--color-primary)">Quên mật khẩu?</span>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg" type="submit">Đăng nhập</button>
+          <div class="auth-divider"><span>hoặc</span></div>
+          <div class="flex" style="gap:var(--s-2);">
+            <button class="btn btn-secondary btn-block" type="button"><i data-lucide="chrome"></i>Google</button>
+            <button class="btn btn-secondary btn-block" type="button"><i data-lucide="facebook"></i>Facebook</button>
+          </div>
+          <p class="text-center text-secondary fs-sm" style="margin-top: var(--s-5);">
+            Chưa có tài khoản? <a href="signup.html" style="color:var(--color-primary);font-weight:600;">Đăng ký miễn phí</a>
+          </p>
+        </form>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="js/pages/login.js"></script>
+</body>
+</html>

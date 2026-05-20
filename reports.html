@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Báo cáo — QLTC</title>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/reports.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+</head>
+<body>
+  <section id="page-reports">
+    <div class="page-header">
+      <div>
+        <h1>Báo cáo</h1>
+        <div class="subtitle">Phân tích sâu hơn về tài chính của bạn</div>
+      </div>
+      <div class="segmented" id="range-seg">
+        <button data-range="month" class="is-active">Tháng</button>
+        <button data-range="quarter">Quý</button>
+        <button data-range="year">Năm</button>
+      </div>
+    </div>
+
+    <div class="grid grid-stats" id="r-summary"></div>
+
+    <div class="grid grid-2" style="margin-top: var(--s-6);">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Thu chi theo tháng</div></div>
+        <div style="height: 300px; position: relative;"><canvas id="chart-bar"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Chi tiêu theo danh mục</div></div>
+        <div style="height: 300px; position: relative;"><canvas id="chart-cat"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: var(--s-6);">
+      <div class="card-header"><div class="card-title">Top 5 khoản chi lớn nhất</div></div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Mô tả</th><th>Danh mục</th><th>Ngày</th><th class="text-right">Số tiền</th></tr></thead>
+          <tbody id="top-spending"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <script type="module" src="js/pages/reports.js"></script>
+</body>
+</html>

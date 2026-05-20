@@ -1,0 +1,10 @@
+/* goals.css */
+.goal-tile { display: flex; flex-direction: column; gap: var(--s-3); }
+.goal-tile .g-head { display: flex; align-items: center; gap: var(--s-3); }
+.goal-tile .g-icon { width: 48px; height: 48px; border-radius: var(--r-md); display: grid; place-items: center; }
+.goal-tile .g-icon [data-lucide] { width: 22px; height: 22px; }
+.goal-tile .g-name { font-weight: 600; font-size: var(--fs-lg); flex: 1; }
+.goal-tile .g-percent { font-weight: 700; font-size: var(--fs-xl); }
+.goal-tile .g-meta { display: flex; justify-content: space-between; font-size: var(--fs-sm); }
+.goal-tile .g-deadline { font-size: var(--fs-xs); color: var(--text-muted); display: flex; align-items: center; gap: var(--s-1); }
+.goal-tile .g-actions { display: flex; gap: var(--s-2); margin-top: var(--s-2); }

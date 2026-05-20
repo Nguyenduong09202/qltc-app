@@ -1,0 +1,59 @@
+Logo của ứng dụng — có 2 tùy chọn
+====================================
+
+╔══════════════════════════════════════════════════════════╗
+║ TÙY CHỌN 1: Thay CẢ CỤM (gradient box + chữ QLTC)        ║
+║ → Đặt file:  assets/images/brand.png                     ║
+╚══════════════════════════════════════════════════════════╝
+
+Khi có file brand.png:
+  - Ảnh sẽ thay thế TOÀN BỘ cụm logo (box + chữ QLTC)
+  - Cao cố định 36px (nav/sidebar) hoặc 48px (auth) hoặc 32px (footer)
+  - Rộng tự động theo tỷ lệ, tối đa 200px (240px ở auth)
+
+Yêu cầu ảnh brand.png:
+  - Định dạng: PNG nền trong suốt (khuyến nghị) hoặc SVG
+  - Tỷ lệ: ngang (3:1 hoặc 4:1) — VD 240x60px, 320x80px, 400x100px
+  - Bao gồm: icon + chữ thương hiệu trong cùng 1 ảnh
+  - Dung lượng: < 100KB
+
+╔══════════════════════════════════════════════════════════╗
+║ TÙY CHỌN 2: Chỉ thay BOX icon (giữ chữ "QLTC")           ║
+║ → Đặt file:  assets/images/logo.png                      ║
+╚══════════════════════════════════════════════════════════╝
+
+Khi có file logo.png (và KHÔNG có brand.png):
+  - Ảnh thay thế chỉ phần box gradient + chữ "₫"
+  - Chữ "QLTC" bên cạnh vẫn giữ nguyên (đọc bằng font Be Vietnam Pro)
+  - Box vuông 36x36px
+
+Yêu cầu ảnh logo.png:
+  - Định dạng: PNG nền trong suốt hoặc SVG
+  - Tỷ lệ: 1:1 (vuông) — VD 200x200px
+  - Dung lượng: < 100KB
+
+╔══════════════════════════════════════════════════════════╗
+║ FALLBACK MẶC ĐỊNH (không có ảnh nào)                     ║
+╚══════════════════════════════════════════════════════════╝
+
+Box gradient tím + chữ "₫" + chữ "QLTC" (như hiện tại)
+
+╔══════════════════════════════════════════════════════════╗
+║ THỨ TỰ ƯU TIÊN                                           ║
+╚══════════════════════════════════════════════════════════╝
+
+  brand.png  >  logo.png  >  fallback mặc định
+
+→ Nếu cả 2 file đều có, brand.png sẽ được ưu tiên hiển thị.
+
+╔══════════════════════════════════════════════════════════╗
+║ ÁP DỤNG TỰ ĐỘNG Ở 5 VỊ TRÍ                               ║
+╚══════════════════════════════════════════════════════════╝
+
+  1. Navigation bar trang chủ (landing)
+  2. Footer trang chủ
+  3. Sidebar tất cả các trang trong app
+  4. Cột bên trái trang Đăng nhập
+  5. Cột bên trái trang Đăng ký
+
+Chỉ cần đặt 1 file ảnh, tất cả 5 nơi tự cập nhật.

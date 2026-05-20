@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Giao dịch — QLTC</title>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/transactions.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/locale/vi.js"></script>
+  <script>if(typeof dayjs!=='undefined'){dayjs.locale('vi');}</script>
+</head>
+<body>
+  <section id="page-transactions">
+    <div class="page-header">
+      <div>
+        <h1>Giao dịch</h1>
+        <div class="subtitle">Quản lý mọi khoản thu chi của bạn</div>
+      </div>
+      <button class="btn btn-primary" id="btn-add"><i data-lucide="plus"></i><span>Thêm giao dịch</span></button>
+    </div>
+
+    <div class="card">
+      <div class="filter-bar">
+        <div class="search-input">
+          <i data-lucide="search"></i>
+          <input id="f-search" class="input" type="search" placeholder="Tìm theo mô tả..." />
+        </div>
+        <select class="select" id="f-type">
+          <option value="">Tất cả loại</option>
+          <option value="income">Thu</option>
+          <option value="expense">Chi</option>
+        </select>
+        <select class="select" id="f-category"><option value="">Tất cả danh mục</option></select>
+        <select class="select" id="f-wallet"><option value="">Tất cả ví</option></select>
+        <input class="input" id="f-from" type="date" />
+        <input class="input" id="f-to" type="date" />
+        <button class="btn btn-ghost btn-sm" id="f-reset"><i data-lucide="x"></i>Xóa lọc</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="table" id="tx-table">
+          <thead>
+            <tr>
+              <th data-sort="date">Ngày</th>
+              <th data-sort="note">Mô tả</th>
+              <th data-sort="category">Danh mục</th>
+              <th data-sort="wallet">Ví</th>
+              <th data-sort="amount" class="text-right">Số tiền</th>
+              <th class="text-right">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="tx-body"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </section>
+
+  <script type="module" src="js/pages/transactions.js"></script>
+</body>
+</html>

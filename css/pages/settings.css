@@ -1,0 +1,6 @@
+/* settings.css */
+.setting-row {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-3);
+  padding: var(--s-2) 0;
+}
+#page-settings .card { margin-bottom: 0; }

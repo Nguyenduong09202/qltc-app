@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ví & Tài khoản — QLTC</title>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/accounts.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+</head>
+<body>
+  <section id="page-accounts">
+    <div class="page-header">
+      <div>
+        <h1>Ví & Tài khoản</h1>
+        <div class="subtitle">Quản lý nguồn tiền của bạn</div>
+      </div>
+      <button class="btn btn-primary" id="btn-add"><i data-lucide="plus"></i><span>Thêm ví</span></button>
+    </div>
+    <div class="grid grid-3" id="wallet-list"></div>
+    <div class="card" style="margin-top: var(--s-6);">
+      <div class="card-header"><div class="card-title">Giao dịch theo ví</div></div>
+      <div id="wallet-tx"></div>
+    </div>
+  </section>
+  <script type="module" src="js/pages/accounts.js"></script>
+</body>
+</html>

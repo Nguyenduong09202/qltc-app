@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ngân sách — QLTC</title>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/budgets.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+</head>
+<body>
+  <section id="page-budgets">
+    <div class="page-header">
+      <div>
+        <h1>Ngân sách</h1>
+        <div class="subtitle">Theo dõi giới hạn chi tiêu hàng tháng</div>
+      </div>
+      <button class="btn btn-primary" id="btn-add"><i data-lucide="plus"></i><span>Thêm ngân sách</span></button>
+    </div>
+
+    <div class="grid grid-stats" id="b-summary"></div>
+    <div class="grid grid-3" id="b-list" style="margin-top: var(--s-6);"></div>
+  </section>
+  <script type="module" src="js/pages/budgets.js"></script>
+</body>
+</html>

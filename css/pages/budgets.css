@@ -1,0 +1,11 @@
+/* budgets.css */
+.budget-card { padding: var(--s-5); }
+.budget-card .b-head { display: flex; align-items: center; gap: var(--s-3); margin-bottom: var(--s-3); }
+.budget-card .b-icon { width: 40px; height: 40px; border-radius: var(--r-md); display: grid; place-items: center; flex-shrink: 0; }
+.budget-card .b-icon [data-lucide] { width: 20px; height: 20px; }
+.budget-card .b-name { font-weight: 600; font-size: var(--fs-lg); }
+.budget-card .b-amounts { display: flex; justify-content: space-between; margin: var(--s-3) 0 var(--s-2); font-size: var(--fs-sm); }
+.budget-card .b-amounts .spent { color: var(--text-primary); font-weight: 600; }
+.budget-card .b-amounts .total { color: var(--text-muted); }
+.budget-card .b-status { display: flex; justify-content: space-between; margin-top: var(--s-2); font-size: var(--fs-xs); }
+.budget-card .b-actions { display: flex; gap: var(--s-2); margin-top: var(--s-3); }

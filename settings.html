@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cài đặt — QLTC</title>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/settings.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <section id="page-settings">
+    <div class="page-header">
+      <div>
+        <h1>Cài đặt</h1>
+        <div class="subtitle">Tùy chỉnh trải nghiệm của bạn</div>
+      </div>
+    </div>
+
+    <div class="grid grid-main">
+      <div class="flex-col">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Hồ sơ</div></div>
+          <div class="form-field">
+            <label class="form-label">Họ và tên</label>
+            <input class="input" id="s-name" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">Email</label>
+            <input class="input" id="s-email" type="email" />
+          </div>
+          <button class="btn btn-primary" id="save-profile">Lưu hồ sơ</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">Giao diện</div></div>
+          <div class="setting-row">
+            <div>
+              <div class="font-semibold">Chế độ tối</div>
+              <div class="text-muted fs-sm">Bật để giảm mỏi mắt vào ban đêm</div>
+            </div>
+            <label class="switch"><input type="checkbox" id="s-dark"><span class="slider"></span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">Tùy chọn chung</div></div>
+          <div class="form-field">
+            <label class="form-label">Ngôn ngữ</label>
+            <select class="select" id="s-lang">
+              <option value="vi">Tiếng Việt</option>
+              <option value="en">English (sắp ra mắt)</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Đơn vị tiền tệ</label>
+            <select class="select" id="s-currency">
+              <option value="VND">VND (₫)</option>
+              <option value="USD">USD ($) (sắp ra mắt)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-col">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Dữ liệu</div></div>
+          <p class="text-secondary fs-sm" style="margin-bottom: var(--s-3);">Sao lưu hoặc khôi phục dữ liệu của bạn (lưu cục bộ trên trình duyệt).</p>
+          <div class="flex" style="flex-wrap: wrap;">
+            <button class="btn btn-secondary" id="export-data"><i data-lucide="download"></i>Xuất JSON</button>
+            <button class="btn btn-secondary" id="import-data"><i data-lucide="upload"></i>Nhập JSON</button>
+            <input type="file" id="import-file" accept="application/json" hidden />
+            <button class="btn btn-danger" id="reset-data"><i data-lucide="refresh-cw"></i>Khôi phục mặc định</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">Về ứng dụng</div></div>
+          <p class="text-secondary fs-sm">Quản lý Tài chính Cá nhân — phiên bản demo UI</p>
+          <p class="text-muted fs-xs">v1.0 · Frontend Only · HTML/CSS/JS Vanilla</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script type="module" src="js/pages/settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mục tiêu — QLTC</title>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/goals.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js"></script>
+</head>
+<body>
+  <section id="page-goals">
+    <div class="page-header">
+      <div>
+        <h1>Mục tiêu tiết kiệm</h1>
+        <div class="subtitle">Hành trình tới những điều bạn mong muốn</div>
+      </div>
+      <button class="btn btn-primary" id="btn-add"><i data-lucide="plus"></i><span>Thêm mục tiêu</span></button>
+    </div>
+    <div class="grid grid-3" id="g-list"></div>
+  </section>
+  <script type="module" src="js/pages/goals.js"></script>
+</body>
+</html>
