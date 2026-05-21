@@ -4,10 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Giao dịch — QLTC</title>
-  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);var P={indigo:['#4F46E5','#4338CA'],emerald:['#10B981','#059669'],rose:['#E11D48','#BE123C'],amber:['#F59E0B','#D97706'],ocean:['#0EA5E9','#0284C7'],violet:['#8B5CF6','#7C3AED'],slate:['#475569','#334155']};var pk=localStorage.getItem('theme.preset')||'indigo';var c=pk==='custom'?(localStorage.getItem('theme.custom')||'#4F46E5'):(P[pk]?P[pk][0]:'#4F46E5');var h=pk==='custom'?c:(P[pk]?P[pk][1]:'#4338CA');var n=parseInt(c.slice(1),16);var r=(n>>16)&255,g=(n>>8)&255,b=n&255;document.documentElement.style.setProperty('--color-primary',c);document.documentElement.style.setProperty('--color-primary-hover',h);document.documentElement.style.setProperty('--color-primary-soft','rgba('+r+','+g+','+b+',0.12)');}catch(e){}})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4F46E5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="QLTC">
+  <link rel="apple-touch-icon" href="assets/images/brand.png">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
@@ -21,40 +27,40 @@
   <section id="page-transactions">
     <div class="page-header">
       <div>
-        <h1>Giao dịch</h1>
-        <div class="subtitle">Quản lý mọi khoản thu chi của bạn</div>
+        <h1 data-i18n="tx.title">Giao dịch</h1>
+        <div class="subtitle" data-i18n="tx.subtitle">Quản lý mọi khoản thu chi của bạn</div>
       </div>
-      <button class="btn btn-primary" id="btn-add"><i data-lucide="plus"></i><span>Thêm giao dịch</span></button>
+      <button class="btn btn-primary" id="btn-add"><i data-lucide="plus"></i><span data-i18n="dash.add.tx">Thêm giao dịch</span></button>
     </div>
 
     <div class="card">
-      <div class="filter-bar">
+      <div class="filter-bar tx-filter-bar">
         <div class="search-input">
           <i data-lucide="search"></i>
-          <input id="f-search" class="input" type="search" placeholder="Tìm theo mô tả..." />
+          <input id="f-search" class="input" type="search" placeholder="Tìm theo mô tả..." data-i18n-attr="placeholder" data-i18n-key="tx.search.ph" />
         </div>
         <select class="select" id="f-type">
-          <option value="">Tất cả loại</option>
-          <option value="income">Thu</option>
-          <option value="expense">Chi</option>
+          <option value="" data-i18n="tx.filter.all.type">Tất cả loại</option>
+          <option value="income" data-i18n="common.income">Thu</option>
+          <option value="expense" data-i18n="common.expense">Chi</option>
         </select>
-        <select class="select" id="f-category"><option value="">Tất cả danh mục</option></select>
-        <select class="select" id="f-wallet"><option value="">Tất cả ví</option></select>
+        <select class="select" id="f-category"><option value="" data-i18n="tx.filter.all.cat">Tất cả danh mục</option></select>
+        <select class="select" id="f-wallet"><option value="" data-i18n="tx.filter.all.wal">Tất cả ví</option></select>
         <input class="input" id="f-from" type="date" />
         <input class="input" id="f-to" type="date" />
-        <button class="btn btn-ghost btn-sm" id="f-reset"><i data-lucide="x"></i>Xóa lọc</button>
+        <button class="btn btn-ghost btn-sm" id="f-reset"><i data-lucide="x"></i><span data-i18n="tx.filter.reset">Xóa lọc</span></button>
       </div>
 
       <div class="table-wrap">
         <table class="table" id="tx-table">
           <thead>
             <tr>
-              <th data-sort="date">Ngày</th>
-              <th data-sort="note">Mô tả</th>
-              <th data-sort="category">Danh mục</th>
-              <th data-sort="wallet">Ví</th>
-              <th data-sort="amount" class="text-right">Số tiền</th>
-              <th class="text-right">Thao tác</th>
+              <th data-sort="date" data-i18n="tx.col.date">Ngày</th>
+              <th data-sort="note" data-i18n="tx.col.note">Mô tả</th>
+              <th data-sort="category" data-i18n="tx.col.category">Danh mục</th>
+              <th data-sort="wallet" data-i18n="tx.col.wallet">Ví</th>
+              <th data-sort="amount" class="text-right" data-i18n="tx.col.amount">Số tiền</th>
+              <th class="text-right"></th>
             </tr>
           </thead>
           <tbody id="tx-body"></tbody>

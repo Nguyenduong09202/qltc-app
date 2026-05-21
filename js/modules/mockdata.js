@@ -116,6 +116,41 @@ export const SEED = {
       { id: 'b5', categoryId: 'c5',  period: 'monthly', limit: 2500000, startDate: day(30) },
       { id: 'b6', categoryId: 'c11', period: 'monthly', limit: 10000000, startDate: day(30) },
       { id: 'b7', categoryId: 'c12', period: 'monthly', limit: 1500000, startDate: day(30) }
+    ],
+    friends: [
+      { id: 'f1', name: 'Minh Khoa',  color: '#4F46E5' },
+      { id: 'f2', name: 'Hà Linh',    color: '#16A34A' },
+      { id: 'f3', name: 'Tuấn Anh',   color: '#F59E0B' },
+      { id: 'f4', name: 'Mai Phương', color: '#EC4899' }
+    ],
+    splits: [
+      {
+        id: 's1',
+        title: 'Lẩu cuối tuần ở Ximending',
+        totalAmount: 2400000,
+        date: day(3),
+        paidBy: 'me',
+        note: 'Lẩu 4 người + đồ uống',
+        participants: [
+          { id: 'me', share: 600000, settled: true },
+          { id: 'f1', share: 600000, settled: false },
+          { id: 'f2', share: 600000, settled: true },
+          { id: 'f3', share: 600000, settled: false }
+        ]
+      },
+      {
+        id: 's2',
+        title: 'Thuê airbnb Tainan 2 đêm',
+        totalAmount: 4800000,
+        date: day(10),
+        paidBy: 'f2',
+        note: '',
+        participants: [
+          { id: 'me', share: 1600000, settled: false },
+          { id: 'f2', share: 1600000, settled: true },
+          { id: 'f4', share: 1600000, settled: false }
+        ]
+      }
     ]
   }
 };

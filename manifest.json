@@ -1,0 +1,32 @@
+{
+  "name": "QLTC — Quản lý Tài chính Cá nhân",
+  "short_name": "QLTC",
+  "description": "Theo dõi thu chi, lập ngân sách và đạt mục tiêu tiết kiệm.",
+  "start_url": "./dashboard.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0B1220",
+  "theme_color": "#4F46E5",
+  "lang": "vi",
+  "dir": "ltr",
+  "categories": ["finance", "productivity", "lifestyle"],
+  "icons": [
+    { "src": "assets/images/brand.png", "sizes": "any", "type": "image/png", "purpose": "any" },
+    { "src": "assets/images/brand.png", "sizes": "any", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Thêm giao dịch",
+      "short_name": "Giao dịch",
+      "url": "./transactions.html?action=new",
+      "icons": [{ "src": "assets/images/brand.png", "sizes": "any" }]
+    },
+    {
+      "name": "Chia hóa đơn",
+      "short_name": "Split bill",
+      "url": "./splits.html",
+      "icons": [{ "src": "assets/images/brand.png", "sizes": "any" }]
+    }
+  ]
+}

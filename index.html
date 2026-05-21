@@ -4,9 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>QLTC — Quản lý Tài chính Cá nhân thông minh</title>
-  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);var P={indigo:['#4F46E5','#4338CA'],emerald:['#10B981','#059669'],rose:['#E11D48','#BE123C'],amber:['#F59E0B','#D97706'],ocean:['#0EA5E9','#0284C7'],violet:['#8B5CF6','#7C3AED'],slate:['#475569','#334155']};var pk=localStorage.getItem('theme.preset')||'indigo';var c=pk==='custom'?(localStorage.getItem('theme.custom')||'#4F46E5'):(P[pk]?P[pk][0]:'#4F46E5');var h=pk==='custom'?c:(P[pk]?P[pk][1]:'#4338CA');var n=parseInt(c.slice(1),16);var r=(n>>16)&255,g=(n>>8)&255,b=n&255;document.documentElement.style.setProperty('--color-primary',c);document.documentElement.style.setProperty('--color-primary-hover',h);document.documentElement.style.setProperty('--color-primary-soft','rgba('+r+','+g+','+b+',0.12)');}catch(e){}})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4F46E5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="QLTC">
+  <link rel="apple-touch-icon" href="assets/images/brand.png">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages/landing.css">
@@ -19,14 +25,15 @@
         <img class="brand-full" src="assets/images/brand.png" alt="QLTC" onload="this.parentElement.classList.add('has-brand-full')" onerror="this.remove()" /><span class="brand-mark">₫</span><span class="brand-text">QLTC</span>
       </a>
       <nav class="ld-nav-links">
-        <a href="#top">Tính năng</a>
-        <a href="#how">Cách hoạt động</a>
-        <a href="#testimonials">Đánh giá</a>
-        <a href="#team">Đội ngũ</a>
+        <a href="#top" data-i18n="nav.features">Tính năng</a>
+        <a href="#how" data-i18n="nav.how">Cách hoạt động</a>
+        <a href="#testimonials" data-i18n="nav.testimonials">Đánh giá</a>
+        <a href="#team" data-i18n="nav.team">Đội ngũ</a>
       </nav>
-      <div class="flex">
-        <a href="login.html" class="btn btn-outline-primary">Đăng nhập</a>
-        <a href="signup.html" class="btn btn-primary">Bắt đầu miễn phí</a>
+      <div class="flex" style="align-items:center;gap:var(--s-3);">
+        <div class="lang-switch" id="lang-switch"></div>
+        <a href="login.html" class="btn btn-outline-primary" data-i18n="nav.signin">Đăng nhập</a>
+        <a href="signup.html" class="btn btn-primary" data-i18n="nav.signup">Bắt đầu miễn phí</a>
       </div>
     </div>
   </header>
@@ -35,12 +42,12 @@
     <div class="container">
       <div class="hero-grid">
         <div class="hero-copy slide-up">
-          <div class="badge"><span>✨ Mới ra mắt</span> · Phiên bản 1.0</div>
-          <h1>Làm chủ tài chính cá nhân,<br><span class="text-grad">từng đồng một.</span></h1>
-          <p class="lead">QLTC giúp bạn theo dõi thu chi, lập ngân sách và đạt được mục tiêu tiết kiệm — tất cả trong một giao diện đẹp, gọn gàng và dễ dùng.</p>
+          <div class="badge"><span data-i18n="hero.badge">✨ Mới ra mắt</span> · <span data-i18n="hero.version">Phiên bản 1.0</span></div>
+          <h1><span data-i18n="hero.h1.line1">Làm chủ tài chính cá nhân,</span><br><span class="text-grad" data-i18n="hero.h1.line2">từng đồng một.</span></h1>
+          <p class="lead" data-i18n="hero.lead">QLTC giúp bạn theo dõi thu chi, lập ngân sách và đạt được mục tiêu tiết kiệm — tất cả trong một giao diện đẹp, gọn gàng và dễ dùng.</p>
           <div class="hero-actions">
-            <a href="signup.html" class="btn btn-primary btn-lg"><i data-lucide="rocket"></i>Dùng thử miễn phí</a>
-            <button type="button" id="btn-demo" class="btn btn-secondary btn-lg"><i data-lucide="play"></i>Xem demo</button>
+            <a href="signup.html" class="btn btn-primary btn-lg"><i data-lucide="rocket"></i><span data-i18n="hero.cta.try">Dùng thử miễn phí</span></a>
+            <button type="button" id="btn-demo" class="btn btn-secondary btn-lg"><i data-lucide="play"></i><span data-i18n="hero.cta.demo">Xem demo</span></button>
           </div>
           <div class="hero-trust">
             <div class="avatars">
@@ -49,24 +56,24 @@
               <span style="background:#F59E0B">T</span>
               <span style="background:#EC4899">H</span>
             </div>
-            <span>Hơn <strong>10.000+</strong> người dùng đang quản lý tài chính tốt hơn</span>
+            <span><span data-i18n="hero.trust.over">Hơn</span> <strong>10.000+</strong> <span data-i18n="hero.trust">người dùng đang quản lý tài chính tốt hơn</span></span>
           </div>
         </div>
         <div class="hero-visual">
           <div class="mock-card mc-balance">
-            <div class="mc-label">Tổng tài sản</div>
-            <div class="mc-value">22.570.000 ₫</div>
-            <div class="mc-chip"><i data-lucide="trending-up"></i>+12.4% so với tháng trước</div>
+            <div class="mc-label" data-i18n="mock.assets">Tổng tài sản</div>
+            <div class="mc-value" data-amount-vnd="22570000">22.570.000 ₫</div>
+            <div class="mc-chip"><i data-lucide="trending-up"></i>+12.4% <span data-i18n="mock.vs.lastmonth">so với tháng trước</span></div>
           </div>
           <div class="mock-card mc-tx">
-            <div class="mc-row"><div class="mc-icon" style="background:#16A34A22;color:#16A34A"><i data-lucide="briefcase"></i></div><div><div class="mc-row-title">Lương tháng 5</div><div class="mc-row-meta">Vietcombank</div></div><div class="text-success font-bold">+25.000.000</div></div>
-            <div class="mc-row"><div class="mc-icon" style="background:#F59E0B22;color:#F59E0B"><i data-lucide="utensils"></i></div><div><div class="mc-row-title">Bữa trưa</div><div class="mc-row-meta">Tiền mặt</div></div><div class="text-danger font-bold">−185.000</div></div>
-            <div class="mc-row"><div class="mc-icon" style="background:#0EA5E922;color:#0EA5E9"><i data-lucide="car"></i></div><div><div class="mc-row-title">Grab</div><div class="mc-row-meta">MoMo</div></div><div class="text-danger font-bold">−50.000</div></div>
+            <div class="mc-row"><div class="mc-icon" style="background:#16A34A22;color:#16A34A"><i data-lucide="briefcase"></i></div><div><div class="mc-row-title" data-i18n="mock.salary">Lương tháng 5</div><div class="mc-row-meta" data-i18n="mock.bank">Vietcombank</div></div><div class="text-success font-bold" data-amount-vnd="25000000" data-amount-sign="+">+25.000.000</div></div>
+            <div class="mc-row"><div class="mc-icon" style="background:#F59E0B22;color:#F59E0B"><i data-lucide="utensils"></i></div><div><div class="mc-row-title" data-i18n="mock.lunch">Bữa trưa</div><div class="mc-row-meta" data-i18n="mock.cash">Tiền mặt</div></div><div class="text-danger font-bold" data-amount-vnd="185000" data-amount-sign="−">−185.000</div></div>
+            <div class="mc-row"><div class="mc-icon" style="background:#0EA5E922;color:#0EA5E9"><i data-lucide="car"></i></div><div><div class="mc-row-title" data-i18n="mock.grab">Grab</div><div class="mc-row-meta" data-i18n="mock.momo">MoMo</div></div><div class="text-danger font-bold" data-amount-vnd="50000" data-amount-sign="−">−50.000</div></div>
           </div>
           <div class="mock-card mc-goal">
-            <div class="mc-label">Quỹ khẩn cấp</div>
+            <div class="mc-label" data-i18n="mock.emergency">Quỹ khẩn cấp</div>
             <div class="progress"><div class="progress-fill" style="width:64%"></div></div>
-            <div class="mc-row-meta">32.000.000 / 50.000.000 ₫ · 64%</div>
+            <div class="mc-row-meta"><span data-amount-vnd="32000000">32.000.000</span> / <span data-amount-vnd="50000000">50.000.000 ₫</span> · 64%</div>
           </div>
         </div>
       </div>
@@ -76,39 +83,39 @@
 <section id="features" class="ld-section">
     <div class="container">
       <div class="section-head">
-        <h2>Mọi thứ bạn cần để tài chính khỏe mạnh</h2>
-        <p class="lead">Một bộ công cụ đầy đủ, thiết kế tối giản, tập trung vào điều quan trọng nhất.</p>
+        <h2 data-i18n="features.h2">Mọi thứ bạn cần để tài chính khỏe mạnh</h2>
+        <p class="lead" data-i18n="features.lead">Một bộ công cụ đầy đủ, thiết kế tối giản, tập trung vào điều quan trọng nhất.</p>
       </div>
       <div class="features-grid">
         <div class="feature">
           <div class="feature-icon" style="background:#4F46E522;color:#4F46E5"><i data-lucide="layout-dashboard"></i></div>
-          <h3>Tổng quan trực quan</h3>
-          <p>Xem toàn cảnh tài chính chỉ trong một liếc nhìn — số dư, thu chi, biểu đồ và xu hướng.</p>
+          <h3 data-i18n="features.1.title">Tổng quan trực quan</h3>
+          <p data-i18n="features.1.desc">Xem toàn cảnh tài chính chỉ trong một liếc nhìn — số dư, thu chi, biểu đồ và xu hướng.</p>
         </div>
         <div class="feature">
           <div class="feature-icon" style="background:#16A34A22;color:#16A34A"><i data-lucide="arrow-left-right"></i></div>
-          <h3>Ghi chép nhanh</h3>
-          <p>Thêm giao dịch trong vài giây với danh mục có sẵn, ví linh hoạt và ghi chú thông minh.</p>
+          <h3 data-i18n="features.2.title">Ghi chép nhanh</h3>
+          <p data-i18n="features.2.desc">Thêm giao dịch trong vài giây với danh mục có sẵn, ví linh hoạt và ghi chú thông minh.</p>
         </div>
         <div class="feature">
           <div class="feature-icon" style="background:#F59E0B22;color:#F59E0B"><i data-lucide="wallet-cards"></i></div>
-          <h3>Ngân sách thông minh</h3>
-          <p>Đặt giới hạn cho từng danh mục — chúng tôi cảnh báo khi bạn sắp vượt ngưỡng.</p>
+          <h3 data-i18n="features.3.title">Ngân sách thông minh</h3>
+          <p data-i18n="features.3.desc">Đặt giới hạn cho từng danh mục — chúng tôi cảnh báo khi bạn sắp vượt ngưỡng.</p>
         </div>
         <div class="feature">
           <div class="feature-icon" style="background:#EC489922;color:#EC4899"><i data-lucide="target"></i></div>
-          <h3>Mục tiêu tiết kiệm</h3>
-          <p>Đặt mục tiêu và theo dõi từng phần trăm tiến độ — từ quỹ khẩn cấp tới chuyến du lịch mơ ước.</p>
+          <h3 data-i18n="features.4.title">Mục tiêu tiết kiệm</h3>
+          <p data-i18n="features.4.desc">Đặt mục tiêu và theo dõi từng phần trăm tiến độ — từ quỹ khẩn cấp tới chuyến du lịch mơ ước.</p>
         </div>
         <div class="feature">
           <div class="feature-icon" style="background:#0EA5E922;color:#0EA5E9"><i data-lucide="bar-chart-3"></i></div>
-          <h3>Báo cáo sâu sắc</h3>
-          <p>Phân tích xu hướng chi tiêu theo thời gian, danh mục và ví với biểu đồ tương tác.</p>
+          <h3 data-i18n="features.5.title">Báo cáo sâu sắc</h3>
+          <p data-i18n="features.5.desc">Phân tích xu hướng chi tiêu theo thời gian, danh mục và ví với biểu đồ tương tác.</p>
         </div>
         <div class="feature">
           <div class="feature-icon" style="background:#8B5CF622;color:#8B5CF6"><i data-lucide="moon"></i></div>
-          <h3>Sáng & Tối</h3>
-          <p>Giao diện đẹp mắt cả ngày lẫn đêm — chuyển đổi mượt mà, dễ chịu cho mắt.</p>
+          <h3 data-i18n="features.6.title">Sáng & Tối</h3>
+          <p data-i18n="features.6.desc">Giao diện đẹp mắt cả ngày lẫn đêm — chuyển đổi mượt mà, dễ chịu cho mắt.</p>
         </div>
       </div>
     </div>
@@ -118,73 +125,73 @@
   <section id="how" class="ld-section">
     <div class="container">
       <div class="section-head">
-        <h2>Từ "không biết tiền đi đâu" đến "kiểm soát mọi đồng"</h2>
-        <p class="lead">Hướng dẫn 5 phút — sau đó app sẽ tự làm phần nặng: tổng hợp, cảnh báo và nhắc bạn điều chỉnh.</p>
+        <h2 data-i18n="how.h2">Từ "không biết tiền đi đâu" đến "kiểm soát mọi đồng"</h2>
+        <p class="lead" data-i18n="how.lead">Hướng dẫn 5 phút — sau đó app sẽ tự làm phần nặng: tổng hợp, cảnh báo và nhắc bạn điều chỉnh.</p>
       </div>
       <div class="how-layout">
         <div class="how-timeline">
           <article class="how-step">
             <div class="how-num">1</div>
             <div>
-              <span class="how-time">30 giây</span>
-              <h3>Tạo tài khoản và thiết lập ban đầu</h3>
-              <p>Bấm <strong>Đăng ký</strong>, nhập tên, email và mật khẩu. QLTC tạo sẵn Tiền mặt, Ngân hàng, Ví điện tử để bạn bắt đầu ngay.</p>
+              <span class="how-time" data-i18n="how.1.time">30 giây</span>
+              <h3 data-i18n="how.1.title">Tạo tài khoản và thiết lập ban đầu</h3>
+              <p data-i18n="how.1.body" data-i18n-html="true">Bấm <strong>Đăng ký</strong>, nhập tên, email và mật khẩu. QLTC tạo sẵn Tiền mặt, Ngân hàng, Ví điện tử để bạn bắt đầu ngay.</p>
               <ul>
-                <li>Vào Cài đặt để chọn VND, USD hoặc EUR.</li>
-                <li>Bật chế độ Tối nếu bạn thường ghi chép vào buổi tối.</li>
-                <li>Trang liên quan: <a href="signup.html">signup.html</a> → <a href="settings.html">settings.html</a></li>
+                <li data-i18n="how.1.li1">Vào Cài đặt để chọn VND, USD hoặc EUR.</li>
+                <li data-i18n="how.1.li2">Bật chế độ Tối nếu bạn thường ghi chép vào buổi tối.</li>
+                <li><span data-i18n="how.1.li3">Trang liên quan:</span> <a href="signup.html">signup.html</a> → <a href="settings.html">settings.html</a></li>
               </ul>
             </div>
           </article>
           <article class="how-step">
             <div class="how-num">2</div>
             <div>
-              <span class="how-time">1 phút</span>
-              <h3>Thêm tài khoản và số dư đầu kỳ</h3>
-              <p>Vào <a href="accounts.html">Tài khoản</a>, bấm <strong>+ Thêm tài khoản</strong>, nhập tên ví hoặc ngân hàng bạn đang dùng thật.</p>
+              <span class="how-time" data-i18n="how.2.time">1 phút</span>
+              <h3 data-i18n="how.2.title">Thêm tài khoản và số dư đầu kỳ</h3>
+              <p data-i18n="how.2.body" data-i18n-html="true">Vào <a href="accounts.html">Tài khoản</a>, bấm <strong>+ Thêm tài khoản</strong>, nhập tên ví hoặc ngân hàng bạn đang dùng thật.</p>
               <ul>
-                <li>Ví dụ: Vietcombank, Tiền mặt, MoMo, thẻ tín dụng.</li>
-                <li>Nhập số dư hiện tại sau khi kiểm tra ví và app ngân hàng.</li>
-                <li>Số dư đầu kỳ đúng thì báo cáo phía sau mới đáng tin.</li>
+                <li data-i18n="how.2.li1">Ví dụ: Vietcombank, Tiền mặt, MoMo, thẻ tín dụng.</li>
+                <li data-i18n="how.2.li2">Nhập số dư hiện tại sau khi kiểm tra ví và app ngân hàng.</li>
+                <li data-i18n="how.2.li3">Số dư đầu kỳ đúng thì báo cáo phía sau mới đáng tin.</li>
               </ul>
             </div>
           </article>
           <article class="how-step">
             <div class="how-num">3</div>
             <div>
-              <span class="how-time">10 giây/giao dịch</span>
-              <h3>Ghi giao dịch hàng ngày</h3>
-              <p>Mở <a href="transactions.html">Giao dịch</a>, chọn Thu, Chi hoặc Chuyển khoản, nhập số tiền, danh mục, tài khoản và ghi chú nếu cần.</p>
+              <span class="how-time" data-i18n="how.3.time">10 giây/giao dịch</span>
+              <h3 data-i18n="how.3.title">Ghi giao dịch hàng ngày</h3>
+              <p data-i18n="how.3.body" data-i18n-html="true">Mở <a href="transactions.html">Giao dịch</a>, chọn Thu, Chi hoặc Chuyển khoản, nhập số tiền, danh mục, tài khoản và ghi chú nếu cần.</p>
               <ul>
-                <li>Ghi ngay khi vừa tiêu, đừng để dồn cuối ngày.</li>
-                <li>Dùng ghi chú cho khoản dễ quên như gửi xe, cà phê, tiền lớp.</li>
-                <li>Thói quen nhỏ này quyết định chất lượng toàn bộ dữ liệu.</li>
+                <li data-i18n="how.3.li1">Ghi ngay khi vừa tiêu, đừng để dồn cuối ngày.</li>
+                <li data-i18n="how.3.li2">Dùng ghi chú cho khoản dễ quên như gửi xe, cà phê, tiền lớp.</li>
+                <li data-i18n="how.3.li3">Thói quen nhỏ này quyết định chất lượng toàn bộ dữ liệu.</li>
               </ul>
             </div>
           </article>
           <article class="how-step">
             <div class="how-num">4</div>
             <div>
-              <span class="how-time">2 phút</span>
-              <h3>Đặt ngân sách và mục tiêu</h3>
-              <p>Ở <a href="budgets.html">Ngân sách</a>, đặt trần chi theo danh mục. Ở <a href="goals.html">Mục tiêu</a>, nhập số tiền cần tiết kiệm và hạn hoàn thành.</p>
+              <span class="how-time" data-i18n="how.4.time">2 phút</span>
+              <h3 data-i18n="how.4.title">Đặt ngân sách và mục tiêu</h3>
+              <p data-i18n="how.4.body" data-i18n-html="true">Ở <a href="budgets.html">Ngân sách</a>, đặt trần chi theo danh mục. Ở <a href="goals.html">Mục tiêu</a>, nhập số tiền cần tiết kiệm và hạn hoàn thành.</p>
               <ul>
-                <li>Ví dụ: Ăn uống 3.000.000đ/tháng, MacBook 25.000.000đ trước 12/2026.</li>
-                <li>App cảnh báo khi gần chạm trần ngân sách.</li>
-                <li>Dùng quy tắc 50/30/20 làm điểm khởi đầu.</li>
+                <li data-i18n="how.4.li1">Ví dụ: Ăn uống 3.000.000đ/tháng, MacBook 25.000.000đ trước 12/2026.</li>
+                <li data-i18n="how.4.li2">App cảnh báo khi gần chạm trần ngân sách.</li>
+                <li data-i18n="how.4.li3">Dùng quy tắc 50/30/20 làm điểm khởi đầu.</li>
               </ul>
             </div>
           </article>
           <article class="how-step">
             <div class="how-num">5</div>
             <div>
-              <span class="how-time">Cuối tuần hoặc cuối tháng</span>
-              <h3>Đọc báo cáo và điều chỉnh</h3>
-              <p>Vào <a href="reports.html">Báo cáo</a> để xem thu-chi theo tháng, chi theo danh mục và tiến độ mục tiêu.</p>
+              <span class="how-time" data-i18n="how.5.time">Cuối tuần hoặc cuối tháng</span>
+              <h3 data-i18n="how.5.title">Đọc báo cáo và điều chỉnh</h3>
+              <p data-i18n="how.5.body" data-i18n-html="true">Vào <a href="reports.html">Báo cáo</a> để xem thu-chi theo tháng, chi theo danh mục và tiến độ mục tiêu.</p>
               <ul>
-                <li>Danh mục nào vượt dự tính? Vì sao?</li>
-                <li>Khoản chi nào có thể cắt hoặc giảm?</li>
-                <li>Mục tiêu tiết kiệm có đang đi đúng tốc độ không?</li>
+                <li data-i18n="how.5.li1">Danh mục nào vượt dự tính? Vì sao?</li>
+                <li data-i18n="how.5.li2">Khoản chi nào có thể cắt hoặc giảm?</li>
+                <li data-i18n="how.5.li3">Mục tiêu tiết kiệm có đang đi đúng tốc độ không?</li>
               </ul>
             </div>
           </article>
@@ -195,8 +202,8 @@
               <span></span><span></span><span></span>
             </div>
             <div class="preview-panel">
-              <div class="preview-title">Tuần này</div>
-              <div class="preview-balance">+1.240.000đ</div>
+              <div class="preview-title" data-i18n="how.preview.week">Tuần này</div>
+              <div class="preview-balance" data-amount-vnd="1240000" data-amount-sign="+">+1.240.000đ</div>
               <div class="preview-chart">
                 <span style="height:42%"></span>
                 <span style="height:68%"></span>
@@ -205,16 +212,16 @@
                 <span style="height:61%"></span>
               </div>
               <div class="preview-list">
-                <div><span>Ăn uống</span><strong>2.450.000đ</strong></div>
-                <div><span>Di chuyển</span><strong>720.000đ</strong></div>
-                <div><span>Tiết kiệm</span><strong>3.000.000đ</strong></div>
+                <div><span data-i18n="how.preview.food">Ăn uống</span><strong data-amount-vnd="2450000">2.450.000đ</strong></div>
+                <div><span data-i18n="how.preview.transport">Di chuyển</span><strong data-amount-vnd="720000">720.000đ</strong></div>
+                <div><span data-i18n="how.preview.saving">Tiết kiệm</span><strong data-amount-vnd="3000000">3.000.000đ</strong></div>
               </div>
             </div>
           </div>
           <div class="how-cta">
-            <h3>Sẵn sàng thử?</h3>
-            <p>Không thẻ tín dụng. Dữ liệu lưu cục bộ trên trình duyệt của bạn.</p>
-            <a href="signup.html" class="btn btn-primary"><i data-lucide="arrow-right"></i>Tạo tài khoản miễn phí</a>
+            <h3 data-i18n="how.cta.title">Sẵn sàng thử?</h3>
+            <p data-i18n="how.cta.desc">Không thẻ tín dụng. Dữ liệu lưu cục bộ trên trình duyệt của bạn.</p>
+            <a href="signup.html" class="btn btn-primary"><i data-lucide="arrow-right"></i><span data-i18n="how.cta.button">Tạo tài khoản miễn phí</span></a>
           </div>
         </aside>
       </div>
@@ -224,53 +231,53 @@
     <section id="testimonials" class="ld-section section-alt">
     <div class="container">
       <div class="section-head">
-        <h2>Sản phẩm sinh ra từ vấn đề thật</h2>
-        <p class="lead">QLTC bắt đầu từ một câu hỏi mà cả 4 thành viên nhóm cùng vướng phải: "Lương sinh viên đi đâu hết rồi?"</p>
+        <h2 data-i18n="story.h2">Sản phẩm sinh ra từ vấn đề thật</h2>
+        <p class="lead" data-i18n="story.lead">QLTC bắt đầu từ một câu hỏi mà cả 4 thành viên nhóm cùng vướng phải: "Lương sinh viên đi đâu hết rồi?"</p>
       </div>
       <div class="story-card">
-        <div class="story-kicker"><i data-lucide="sparkles"></i>Câu chuyện đằng sau</div>
-        <p>Trong hơn 3 tháng làm đồ án, nhóm chúng tôi — 4 du học sinh Việt Nam tại 臺北城市科技大學 — ngồi tổng kết chi tiêu sau một thời gian sống ở Đài Bắc. Kết quả: mất dấu gần 40% số tiền. Excel quá rườm rà, nhiều app nước ngoài không hiểu các khoản rất Việt như đám giỗ, tiền mừng cưới, học phí học kỳ; một số app lại có quá nhiều quảng cáo và gợi ý nâng cấp. Vậy là nhóm quyết định làm một công cụ của riêng mình: đơn giản, đẹp, không quảng cáo, dữ liệu thuộc về người dùng. Đó là QLTC.</p>
+        <div class="story-kicker"><i data-lucide="sparkles"></i><span data-i18n="story.kicker">Câu chuyện đằng sau</span></div>
+        <p data-i18n="story.body">Trong hơn 3 tháng làm đồ án, nhóm chúng tôi — 4 du học sinh Việt Nam tại Đại học Khoa học và Công nghệ Đài Bắc — ngồi tổng kết chi tiêu sau một thời gian sống ở Đài Bắc. Kết quả: mất dấu gần 40% số tiền. Excel quá rườm rà, nhiều app nước ngoài không hiểu các khoản rất Việt như đám giỗ, tiền mừng cưới, học phí học kỳ; một số app lại có quá nhiều quảng cáo và gợi ý nâng cấp. Vậy là nhóm quyết định làm một công cụ của riêng mình: đơn giản, đẹp, không quảng cáo, dữ liệu thuộc về người dùng. Đó là QLTC.</p>
       </div>
       <div class="principles-grid">
         <article class="principle-card">
           <div class="principle-icon" style="background:#4F46E522;color:#4F46E5"><i data-lucide="database"></i></div>
-          <h3>Dữ liệu là của bạn</h3>
-          <p>Lưu cục bộ trên trình duyệt. Không server thu thập, không chia sẻ cho bên thứ ba.</p>
+          <h3 data-i18n="principle.1.title">Dữ liệu là của bạn</h3>
+          <p data-i18n="principle.1.desc">Lưu cục bộ trên trình duyệt. Không server thu thập, không chia sẻ cho bên thứ ba.</p>
         </article>
         <article class="principle-card">
           <div class="principle-icon" style="background:#16A34A22;color:#16A34A"><i data-lucide="badge-x"></i></div>
-          <h3>Không quảng cáo, không bán hàng</h3>
-          <p>Vì là đồ án học phần, QLTC tập trung vào trải nghiệm sạch: không pop-up, không ép nâng cấp.</p>
+          <h3 data-i18n="principle.2.title">Không quảng cáo, không bán hàng</h3>
+          <p data-i18n="principle.2.desc">Vì là đồ án học phần, QLTC tập trung vào trải nghiệm sạch: không pop-up, không ép nâng cấp.</p>
         </article>
         <article class="principle-card">
           <div class="principle-icon" style="background:#F59E0B22;color:#F59E0B"><i data-lucide="languages"></i></div>
-          <h3>Thiết kế cho người Việt</h3>
-          <p>Danh mục gần gũi, hiển thị VND kiểu 1.000.000đ, phù hợp sinh viên Việt ở Đài Bắc.</p>
+          <h3 data-i18n="principle.3.title">Thiết kế cho người Việt</h3>
+          <p data-i18n="principle.3.desc">Danh mục gần gũi, hiển thị VND kiểu 1.000.000đ, phù hợp sinh viên Việt ở Đài Bắc.</p>
         </article>
       </div>
       <div class="class-feedback">
         <div class="section-head compact">
-          <h3>Feedback từ lớp và ký túc xá</h3>
-          <p class="lead">Một vài góp ý ngắn sau buổi demo thử.</p>
+          <h3 data-i18n="feedback.h3">Feedback từ lớp và ký túc xá</h3>
+          <p class="lead" data-i18n="feedback.lead">Một vài góp ý ngắn sau buổi demo thử.</p>
         </div>
         <div class="testimonial-grid">
           <div class="testimonial">
-            <p>"Dashboard dễ hiểu, nhìn là biết tháng này còn ổn hay không."</p>
-            <div class="t-author"><div class="t-avatar" style="background:#4F46E5">L</div><div><div class="font-semibold">Bạn cùng lớp</div><div class="text-muted fs-sm">Workshop môn 行動網頁設計實作</div></div></div>
+            <p data-i18n="feedback.1.quote">"Dashboard dễ hiểu, nhìn là biết tháng này còn ổn hay không."</p>
+            <div class="t-author"><div class="t-avatar" style="background:#4F46E5">L</div><div><div class="font-semibold" data-i18n="feedback.1.name">Bạn cùng lớp</div><div class="text-muted fs-sm" data-i18n="feedback.1.where">Workshop môn Thực hành thiết kế Website</div></div></div>
           </div>
           <div class="testimonial">
-            <p>"Có chuyển khoản giữa các ví nên không bị tính nhầm là chi tiêu."</p>
-            <div class="t-author"><div class="t-avatar" style="background:#16A34A">K</div><div><div class="font-semibold">Bạn trong KTX</div><div class="text-muted fs-sm">Nhóm thử bản demo tháng 12/2025</div></div></div>
+            <p data-i18n="feedback.2.quote">"Có chuyển khoản giữa các ví nên không bị tính nhầm là chi tiêu."</p>
+            <div class="t-author"><div class="t-avatar" style="background:#16A34A">K</div><div><div class="font-semibold" data-i18n="feedback.2.name">Bạn trong KTX</div><div class="text-muted fs-sm" data-i18n="feedback.2.where">Nhóm thử bản demo tháng 12/2025</div></div></div>
           </div>
           <div class="testimonial">
-            <p>"Ngôn ngữ đơn giản, người mới biết nhập ở đâu và đọc gì trước."</p>
-            <div class="t-author"><div class="t-avatar" style="background:#F59E0B">D</div><div><div class="font-semibold">Người thử nghiệm</div><div class="text-muted fs-sm">Góp ý sau khi dùng thử 15 phút</div></div></div>
+            <p data-i18n="feedback.3.quote">"Ngôn ngữ đơn giản, người mới biết nhập ở đâu và đọc gì trước."</p>
+            <div class="t-author"><div class="t-avatar" style="background:#F59E0B">D</div><div><div class="font-semibold" data-i18n="feedback.3.name">Người thử nghiệm</div><div class="text-muted fs-sm" data-i18n="feedback.3.where">Góp ý sau khi dùng thử 15 phút</div></div></div>
           </div>
         </div>
       </div>
       <div class="story-cta">
-        <span>Bạn cũng đang đau đầu với chi tiêu?</span>
-        <a href="signup.html" class="btn btn-primary"><i data-lucide="arrow-right"></i>Thử ngay</a>
+        <span data-i18n="story.cta.text">Bạn cũng đang đau đầu với chi tiêu?</span>
+        <a href="signup.html" class="btn btn-primary"><i data-lucide="arrow-right"></i><span data-i18n="story.cta.button">Thử ngay</span></a>
       </div>
     </div>
   </section>
@@ -278,131 +285,123 @@
     <section id="team" class="ld-section">
     <div class="container">
       <div class="section-head">
-        <h2>Đội ngũ sáng tạo</h2>
-        <p class="lead">第七組 · 4 du học sinh Việt Nam tại Đài Bắc — học công nghệ, làm sản phẩm, chia sẻ niềm vui.</p>
+        <h2 data-i18n="team.h2">Đội ngũ sáng tạo</h2>
+        <p class="lead" data-i18n="team.lead">Nhóm 7 · 4 du học sinh Việt Nam tại Đài Bắc — học công nghệ, làm sản phẩm, chia sẻ niềm vui.</p>
       </div>
       <div class="team-meta-bar">
         <div class="meta-pill">
           <i data-lucide="graduation-cap"></i>
           <div>
-            <div class="meta-label">Trường</div>
-            <div class="meta-value">臺北城市科技大學</div>
+            <div class="meta-label" data-i18n="team.meta.school">Trường</div>
+            <div class="meta-value" data-i18n="team.meta.school.val">Đại học Khoa học và Công nghệ Đài Bắc</div>
           </div>
         </div>
         <div class="meta-pill">
           <i data-lucide="book-open"></i>
           <div>
-            <div class="meta-label">Môn học</div>
-            <div class="meta-value">行動網頁設計實作</div>
+            <div class="meta-label" data-i18n="team.meta.course">Môn học</div>
+            <div class="meta-value" data-i18n="team.meta.course.val">Thực hành thiết kế Website</div>
           </div>
         </div>
         <div class="meta-pill">
           <i data-lucide="users"></i>
           <div>
-            <div class="meta-label">Nhóm</div>
-            <div class="meta-value">第七組</div>
+            <div class="meta-label" data-i18n="team.meta.group">Nhóm</div>
+            <div class="meta-value" data-i18n="team.meta.group.val">Nhóm 7</div>
           </div>
         </div>
       </div>
       <div class="team-grid">
         <article class="team-card">
           <div class="team-photo">
-            <img src="assets/images/team/member-1.jpg" alt="范氏燕" onerror="this.parentElement.classList.add('no-photo');this.remove();" />
-            <span class="team-initials">范</span>
+            <img src="assets/images/team/member-1.jpg" alt="Phạm Thị Yến" onerror="this.parentElement.classList.add('no-photo');this.remove();" />
+            <span class="team-initials">Y</span>
           </div>
-          <div class="team-role tag tag-primary">Trưởng nhóm</div>
-          <h3 class="team-name">范氏燕 / Phạm Thị Yến</h3>
-          <div class="team-meta">MSSV: 41102532</div>
-          <div class="team-profile-row"><i data-lucide="map-pin"></i>Hà Nội · Năm 4</div>
+          <div class="team-role tag tag-primary" data-i18n="team.role.1">Trưởng nhóm</div>
+          <h3 class="team-name" data-i18n="team.name.1">Phạm Thị Yến</h3>
+          <div class="team-profile-row"><span><span data-i18n="team.mssv">MSSV</span>: 41102532</span><i data-lucide="map-pin"></i><span data-i18n="team.location.1">Hà Nội</span></div>
           <div class="team-detail">
-            <h4>Đóng góp chính</h4>
+            <h4 data-i18n="team.contrib">Đóng góp chính</h4>
             <ul>
-              <li>Điều phối nhóm và quản lý timeline</li>
-              <li>Thiết kế hệ thống danh mục thu/chi</li>
-              <li>Viết tài liệu và chuẩn bị demo cuối kỳ</li>
+              <li data-i18n="team.contrib.1.1">Điều phối nhóm và quản lý timeline</li>
+              <li data-i18n="team.contrib.1.2">Thiết kế hệ thống danh mục thu/chi</li>
+              <li data-i18n="team.contrib.1.3">Viết tài liệu và chuẩn bị demo cuối kỳ</li>
             </ul>
           </div>
           <div class="team-stack">Figma · UI Design · Project Management</div>
-          <p class="team-quote">"Mình quản lý chi tiêu bằng Excel suốt 2 năm và phát mệt. Muốn làm cái app mà chính mình dùng được."</p>
         </article>
 
         <article class="team-card">
           <div class="team-photo">
-            <img src="assets/images/team/member-2.jpg" alt="杜銀河" onerror="this.parentElement.classList.add('no-photo');this.remove();" />
-            <span class="team-initials">杜</span>
+            <img src="assets/images/team/member-2.jpg" alt="Đỗ Ngân Hà" onerror="this.parentElement.classList.add('no-photo');this.remove();" />
+            <span class="team-initials">H</span>
           </div>
-          <div class="team-role tag tag-success">Thiết kế UI/UX</div>
-          <h3 class="team-name">杜銀河 / Đỗ Ngân Hà</h3>
-          <div class="team-meta">MSSV: 41102503</div>
-          <div class="team-profile-row"><i data-lucide="map-pin"></i>Hải Phòng · Năm 4</div>
+          <div class="team-role tag tag-success" data-i18n="team.role.2">Thiết kế UI/UX</div>
+          <h3 class="team-name" data-i18n="team.name.2">Đỗ Ngân Hà</h3>
+          <div class="team-profile-row"><span><span data-i18n="team.mssv">MSSV</span>: 41102503</span><i data-lucide="map-pin"></i><span data-i18n="team.location.2">Hải Phòng</span></div>
           <div class="team-detail">
-            <h4>Đóng góp chính</h4>
+            <h4 data-i18n="team.contrib">Đóng góp chính</h4>
             <ul>
-              <li>Nghiên cứu luồng người dùng mới</li>
-              <li>Thiết kế wireframe cho landing và dashboard</li>
-              <li>Kiểm tra khoảng cách, màu sắc và responsive</li>
+              <li data-i18n="team.contrib.2.1">Nghiên cứu luồng người dùng mới</li>
+              <li data-i18n="team.contrib.2.2">Thiết kế wireframe cho landing và dashboard</li>
+              <li data-i18n="team.contrib.2.3">Kiểm tra khoảng cách, màu sắc và responsive</li>
             </ul>
           </div>
           <div class="team-stack">Figma · UX Writing · CSS</div>
-          <p class="team-quote">"Một app tài chính tốt không nên làm người dùng thấy tội lỗi. Nó phải giúp họ nhìn rõ và bắt đầu lại nhẹ nhàng hơn."</p>
         </article>
 
         <article class="team-card">
           <div class="team-photo">
-            <img src="assets/images/team/member-3.jpg" alt="阮氏瓊裝" onerror="this.parentElement.classList.add('no-photo');this.remove();" />
-            <span class="team-initials">阮</span>
+            <img src="assets/images/team/member-3.jpg" alt="Nguyễn Thị Quỳnh Trang" onerror="this.parentElement.classList.add('no-photo');this.remove();" />
+            <span class="team-initials">T</span>
           </div>
-          <div class="team-role tag tag-warning">Lập trình Front-end</div>
-          <h3 class="team-name">阮氏瓊裝 / Nguyễn Thị Quỳnh Trang</h3>
-          <div class="team-meta">MSSV: 41102523</div>
-          <div class="team-profile-row"><i data-lucide="map-pin"></i>Đà Nẵng · Năm 4</div>
+          <div class="team-role tag tag-warning" data-i18n="team.role.3">Lập trình Front-end</div>
+          <h3 class="team-name" data-i18n="team.name.3">Nguyễn Thị Quỳnh Trang</h3>
+          <div class="team-profile-row"><span><span data-i18n="team.mssv">MSSV</span>: 41102523</span><i data-lucide="map-pin"></i><span data-i18n="team.location.3">Đà Nẵng</span></div>
           <div class="team-detail">
-            <h4>Đóng góp chính</h4>
+            <h4 data-i18n="team.contrib">Đóng góp chính</h4>
             <ul>
-              <li>Xây dựng giao diện đăng ký, dashboard và giao dịch</li>
-              <li>Tối ưu component dùng chung bằng HTML/CSS/JS</li>
-              <li>Kết nối dữ liệu mẫu cho trải nghiệm demo</li>
+              <li data-i18n="team.contrib.3.1">Xây dựng giao diện đăng ký, dashboard và giao dịch</li>
+              <li data-i18n="team.contrib.3.2">Tối ưu component dùng chung bằng HTML/CSS/JS</li>
+              <li data-i18n="team.contrib.3.3">Kết nối dữ liệu mẫu cho trải nghiệm demo</li>
             </ul>
           </div>
           <div class="team-stack">HTML · CSS · JavaScript</div>
-          <p class="team-quote">"Mình thích cảm giác biến một bản vẽ Figma thành màn hình thật, bấm được, chạy được và người khác dùng hiểu ngay."</p>
         </article>
 
         <article class="team-card">
           <div class="team-photo">
-            <img src="assets/images/team/member-4.jpg" alt="阮氏俊" onerror="this.parentElement.classList.add('no-photo');this.remove();" />
-            <span class="team-initials">阮</span>
+            <img src="assets/images/team/member-4.jpg" alt="Nguyễn Thị Hậu" onerror="this.parentElement.classList.add('no-photo');this.remove();" />
+            <span class="team-initials">H</span>
           </div>
-          <div class="team-role tag tag-danger">Phân tích dữ liệu</div>
-          <h3 class="team-name">阮氏俊 / Nguyễn Thị Tuấn</h3>
-          <div class="team-meta">MSSV: 41102426</div>
-          <div class="team-profile-row"><i data-lucide="map-pin"></i>Nghệ An · Năm 4</div>
+          <div class="team-role tag tag-danger" data-i18n="team.role.4">Phân tích dữ liệu</div>
+          <h3 class="team-name" data-i18n="team.name.4">Nguyễn Thị Hậu</h3>
+          <div class="team-profile-row"><span><span data-i18n="team.mssv">MSSV</span>: 41102426</span><i data-lucide="map-pin"></i><span data-i18n="team.location.4">Nghệ An</span></div>
           <div class="team-detail">
-            <h4>Đóng góp chính</h4>
+            <h4 data-i18n="team.contrib">Đóng góp chính</h4>
             <ul>
-              <li>Thiết kế logic ngân sách và cảnh báo vượt mức</li>
-              <li>Chuẩn hóa dữ liệu báo cáo theo danh mục</li>
-              <li>Kiểm thử các tình huống thu, chi, chuyển khoản</li>
+              <li data-i18n="team.contrib.4.1">Thiết kế logic ngân sách và cảnh báo vượt mức</li>
+              <li data-i18n="team.contrib.4.2">Chuẩn hóa dữ liệu báo cáo theo danh mục</li>
+              <li data-i18n="team.contrib.4.3">Kiểm thử các tình huống thu, chi, chuyển khoản</li>
             </ul>
           </div>
           <div class="team-stack">JavaScript · Data Logic · Testing</div>
-          <p class="team-quote">"Số liệu chỉ có ích khi nó trả lời được câu hỏi: tháng này mình nên thay đổi điều gì?"</p>
         </article>
       </div>
       <div class="team-journey">
         <div class="journey-head">
           <i data-lucide="calendar-days"></i>
           <div>
-            <h3>Hành trình 第七組</h3>
-            <p>Hơn 3 tháng từ ý tưởng trong ký túc xá đến bản demo hoàn chỉnh cho môn 行動網頁設計實作.</p>
+            <h3 data-i18n="team.journey.h3">Hành trình Nhóm 7</h3>
+            <p data-i18n="team.journey.lead">Hơn 3 tháng từ ý tưởng trong ký túc xá đến bản demo hoàn chỉnh cho môn Thực hành thiết kế Website.</p>
           </div>
         </div>
         <div class="journey-list">
-          <div><strong>Tuần 1-2</strong><span>Chốt vấn đề, khảo sát nhanh bạn cùng lớp/KTX và xác định các màn hình cần có.</span></div>
-          <div><strong>Tuần 3-4</strong><span>Thiết kế wireframe, bảng màu, component và luồng đăng ký, dashboard, giao dịch.</span></div>
-          <div><strong>Tháng 2</strong><span>Code các trang chính: tài khoản, giao dịch, ngân sách, mục tiêu và dữ liệu mẫu.</span></div>
-          <div><strong>Tháng 3</strong><span>Hoàn thiện báo cáo, cài đặt, responsive và sửa lỗi theo feedback khi demo thử.</span></div>
-          <div><strong>Tuần cuối</strong><span>Polish UI, viết tài liệu, chuẩn bị slide và luyện demo trước buổi thuyết trình.</span></div>
+          <div><strong data-i18n="team.journey.1.t">Tuần 1-2</strong><span data-i18n="team.journey.1.d">Chốt vấn đề, khảo sát nhanh bạn cùng lớp/KTX và xác định các màn hình cần có.</span></div>
+          <div><strong data-i18n="team.journey.2.t">Tuần 3-4</strong><span data-i18n="team.journey.2.d">Thiết kế wireframe, bảng màu, component và luồng đăng ký, dashboard, giao dịch.</span></div>
+          <div><strong data-i18n="team.journey.3.t">Tháng 2</strong><span data-i18n="team.journey.3.d">Code các trang chính: tài khoản, giao dịch, ngân sách, mục tiêu và dữ liệu mẫu.</span></div>
+          <div><strong data-i18n="team.journey.4.t">Tháng 3</strong><span data-i18n="team.journey.4.d">Hoàn thiện báo cáo, cài đặt, responsive và sửa lỗi theo feedback khi demo thử.</span></div>
+          <div><strong data-i18n="team.journey.5.t">Tuần cuối</strong><span data-i18n="team.journey.5.d">Polish UI, viết tài liệu, chuẩn bị slide và luyện demo trước buổi thuyết trình.</span></div>
         </div>
       </div>
     </div>
@@ -410,9 +409,9 @@
 
   <section class="ld-cta">
     <div class="container">
-      <h2>Sẵn sàng làm chủ tài chính của bạn?</h2>
-      <p class="lead">Tham gia hàng nghìn người dùng đang quản lý tiền thông minh hơn — hoàn toàn miễn phí.</p>
-      <a href="signup.html" class="btn btn-primary btn-lg"><i data-lucide="arrow-right"></i>Bắt đầu ngay</a>
+      <h2 data-i18n="cta.h2">Sẵn sàng làm chủ tài chính của bạn?</h2>
+      <p class="lead" data-i18n="cta.lead">Tham gia hàng nghìn người dùng đang quản lý tiền thông minh hơn — hoàn toàn miễn phí.</p>
+      <a href="signup.html" class="btn btn-primary btn-lg"><i data-lucide="arrow-right"></i><span data-i18n="cta.button">Bắt đầu ngay</span></a>
     </div>
   </section>
 
@@ -421,43 +420,43 @@
       <div class="footer-grid">
         <div>
           <a href="index.html" class="ld-brand"><img class="brand-full" src="assets/images/brand.png" alt="QLTC" onload="this.parentElement.classList.add('has-brand-full')" onerror="this.remove()" /><span class="brand-mark">₫</span><span class="brand-text">QLTC</span></a>
-          <p class="footer-desc">Từ một câu hỏi rất quen: "Lương sinh viên đi đâu hết rồi?" — nhóm biến nó thành một sản phẩm có thể bấm, dùng thử và cải tiến.</p>
+          <p class="footer-desc" data-i18n="footer.desc">Từ một câu hỏi rất quen: "Lương sinh viên đi đâu hết rồi?" — nhóm biến nó thành một sản phẩm có thể bấm, dùng thử và cải tiến.</p>
           <div class="footer-badges">
-            <span><i data-lucide="hard-drive"></i>Lưu cục bộ</span>
-            <span><i data-lucide="badge-x"></i>Không quảng cáo</span>
-            <span><i data-lucide="moon"></i>Có dark mode</span>
+            <span><i data-lucide="hard-drive"></i><span data-i18n="footer.b.local">Lưu cục bộ</span></span>
+            <span><i data-lucide="badge-x"></i><span data-i18n="footer.b.noads">Không quảng cáo</span></span>
+            <span><i data-lucide="moon"></i><span data-i18n="footer.b.dark">Có dark mode</span></span>
           </div>
         </div>
         <div>
-          <h4>Khám phá</h4>
-          <a href="#features">Tính năng</a>
-          <a href="#how">Cách hoạt động</a>
-          <a href="#testimonials">Câu chuyện</a>
-          <a href="#team">Đội ngũ</a>
+          <h4 data-i18n="footer.explore">Khám phá</h4>
+          <a href="#features" data-i18n="nav.features">Tính năng</a>
+          <a href="#how" data-i18n="nav.how">Cách hoạt động</a>
+          <a href="#testimonials" data-i18n="nav.testimonials">Câu chuyện</a>
+          <a href="#team" data-i18n="nav.team">Đội ngũ</a>
         </div>
         <div>
-          <h4>Ứng dụng</h4>
-          <a href="dashboard.html">Demo</a>
-          <a href="transactions.html">Giao dịch</a>
-          <a href="budgets.html">Ngân sách</a>
-          <a href="reports.html">Báo cáo</a>
+          <h4 data-i18n="footer.app">Ứng dụng</h4>
+          <a href="dashboard.html" data-i18n="footer.app.demo">Demo</a>
+          <a href="transactions.html" data-i18n="footer.app.tx">Giao dịch</a>
+          <a href="budgets.html" data-i18n="footer.app.budgets">Ngân sách</a>
+          <a href="reports.html" data-i18n="footer.app.reports">Báo cáo</a>
         </div>
         <div>
-          <h4>Tài khoản</h4>
-          <a href="login.html">Đăng nhập</a>
-          <a href="signup.html">Đăng ký</a>
-          <a href="settings.html">Cài đặt</a>
+          <h4 data-i18n="footer.account">Tài khoản</h4>
+          <a href="login.html" data-i18n="footer.acc.signin">Đăng nhập</a>
+          <a href="signup.html" data-i18n="footer.acc.signup">Đăng ký</a>
+          <a href="settings.html" data-i18n="footer.acc.settings">Cài đặt</a>
         </div>
         <div class="footer-info">
-          <h4>Thông tin đồ án</h4>
-          <span>臺北城市科技大學</span>
-          <span>行動網頁設計實作</span>
-          <span>第七組 · Hơn 3 tháng phát triển</span>
+          <h4 data-i18n="footer.project">Thông tin đồ án</h4>
+          <span data-i18n="team.meta.school.val">Đại học Khoa học và Công nghệ Đài Bắc</span>
+          <span data-i18n="team.meta.course.val">Thực hành thiết kế Website</span>
+          <span data-i18n="footer.duration">Nhóm 7 · Hơn 3 tháng phát triển</span>
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="text-muted fs-sm">© 2026 QLTC · 第七組 · 行動網頁設計實作 · 臺北城市科技大學</span>
-        <span class="text-muted fs-sm">Made with care by Vietnamese students in Taipei</span>
+        <span class="text-muted fs-sm" data-i18n="footer.copyright">© 2026 QLTC · Nhóm 7 · Thực hành thiết kế Website · Đại học Khoa học và Công nghệ Đài Bắc</span>
+        <span class="text-muted fs-sm" data-i18n="footer.tagline">Made with care by Vietnamese students in Taipei</span>
       </div>
     </div>
   </footer>
@@ -522,6 +521,12 @@
         else if (e.key === 'ArrowRight') go(1);
       });
     })();
+    if (window.lucide) { try { lucide.createIcons(); } catch(e) {} }
+  </script>
+  <script type="module">
+    import { applyLang, mountLangSwitch } from './js/modules/i18n.js';
+    mountLangSwitch(document.getElementById('lang-switch'));
+    applyLang();
     if (window.lucide) { try { lucide.createIcons(); } catch(e) {} }
   </script>
 </body>

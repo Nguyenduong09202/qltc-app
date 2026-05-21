@@ -2,20 +2,21 @@
 import { initStore, getState, setAuth, setPreference, resetAll } from '../modules/store.js';
 import { renderShell } from '../modules/shell.js';
 import { requireAuth } from '../modules/router.js';
-import { setTheme, getTheme } from '../modules/theme.js';
+import { setTheme, getTheme, PRESETS, getPreset, setPreset, getCustomColor, setCustomColor } from '../modules/theme.js';
+import { getLang, setLang, getCurrency, setCurrency, t } from '../modules/i18n.js';
 import { showToast, confirmDialog } from '../modules/ui.js';
 import { mountIcons } from '../modules/icons.js';
 
 initStore();
 if (!requireAuth()) {}
-renderShell({ activePage: 'settings', title: 'Cài đặt' });
+renderShell({ activePage: 'settings', title: t('set.title') });
 
 const state = getState();
 document.getElementById('s-name').value = state.auth?.user?.name || '';
 document.getElementById('s-email').value = state.auth?.user?.email || '';
 document.getElementById('s-dark').checked = getTheme() === 'dark';
-document.getElementById('s-lang').value = state.preferences?.language || 'vi';
-document.getElementById('s-currency').value = state.preferences?.currency || 'VND';
+document.getElementById('s-lang').value = getLang();
+document.getElementById('s-currency').value = getCurrency();
 
 document.getElementById('save-profile').addEventListener('click', () => {
   const name = document.getElementById('s-name').value.trim();
@@ -40,13 +41,72 @@ document.getElementById('s-dark').addEventListener('change', (e) => {
   if (tb) { tb.innerHTML = '<i data-lucide="' + (e.target.checked ? 'sun' : 'moon') + '"></i>'; mountIcons(); }
 });
 
+// Theme presets
+const presetsContainer = document.getElementById('theme-presets');
+const customRow = document.getElementById('custom-color-row');
+const customColorInput = document.getElementById('s-custom-color');
+const customHexInput = document.getElementById('s-custom-hex');
+const currentPreset = getPreset();
+const currentCustom = getCustomColor();
+
+function renderPresets() {
+  const active = getPreset();
+  presetsContainer.innerHTML = Object.entries(PRESETS).map(([key, p]) => {
+    const color = key === 'custom' ? getCustomColor() : p.primary;
+    const name = t('theme.preset.' + key);
+    return `
+      <button type="button" class="theme-preset ${key === active ? 'is-active' : ''}" data-preset="${key}" title="${name}">
+        <span class="theme-swatch" style="background:${color}"></span>
+        <span class="theme-preset-name">${name}</span>
+      </button>
+    `;
+  }).join('');
+  customRow.hidden = active !== 'custom';
+}
+// Re-render presets when language changes
+window.addEventListener('lang-changed', renderPresets);
+
+renderPresets();
+customColorInput.value = currentCustom;
+customHexInput.value = currentCustom;
+
+presetsContainer.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-preset]');
+  if (!btn) return;
+  setPreset(btn.dataset.preset);
+  renderPresets();
+});
+
+customColorInput.addEventListener('input', (e) => {
+  const hex = e.target.value;
+  customHexInput.value = hex;
+  setCustomColor(hex);
+  if (getPreset() !== 'custom') setPreset('custom');
+  renderPresets();
+});
+
+customHexInput.addEventListener('change', (e) => {
+  let hex = e.target.value.trim();
+  if (!hex.startsWith('#')) hex = '#' + hex;
+  if (!/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+    showToast('Mã hex không hợp lệ', 'error');
+    e.target.value = getCustomColor();
+    return;
+  }
+  customColorInput.value = hex;
+  setCustomColor(hex);
+  if (getPreset() !== 'custom') setPreset('custom');
+  renderPresets();
+});
+
 document.getElementById('s-lang').addEventListener('change', (e) => {
-  if (e.target.value !== 'vi') { showToast('Tính năng sắp ra mắt', 'info'); e.target.value = 'vi'; return; }
+  setLang(e.target.value);
   setPreference('language', e.target.value);
 });
 document.getElementById('s-currency').addEventListener('change', (e) => {
-  if (e.target.value !== 'VND') { showToast('Tính năng sắp ra mắt', 'info'); e.target.value = 'VND'; return; }
+  setCurrency(e.target.value);
   setPreference('currency', e.target.value);
+  showToast('Đã đổi đơn vị tiền tệ sang ' + e.target.value, 'success');
 });
 
 document.getElementById('export-data').addEventListener('click', () => {

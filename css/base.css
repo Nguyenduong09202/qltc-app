@@ -163,6 +163,34 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .fs-xl { font-size: var(--fs-xl); }
 .fs-2xl { font-size: var(--fs-2xl); }
 
+/* Offline badge */
+.offline-badge {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(20px);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 10px 16px;
+  background: var(--text-primary);
+  color: var(--bg-surface);
+  border-radius: var(--r-full);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-base), transform var(--t-base);
+  z-index: 9999;
+}
+.offline-badge.is-visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+.offline-badge .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--color-warning);
+  animation: pulse 1.6s infinite;
+}
+
 /* Animations */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }

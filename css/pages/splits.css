@@ -1,0 +1,172 @@
+/* splits.css — split bill page */
+
+.grid-mini {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-4);
+  margin-bottom: var(--s-2);
+}
+@media (max-width: 720px) {
+  .grid-mini { grid-template-columns: 1fr; }
+}
+
+.splits-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.split-card {
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-lg);
+  padding: var(--s-4);
+  background: var(--bg-surface);
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.split-card:hover { border-color: var(--border-strong); box-shadow: var(--shadow-sm); }
+
+.split-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-bottom: var(--s-3);
+}
+.split-head-info { flex: 1; min-width: 0; }
+.split-title { font-weight: 600; font-size: var(--fs-lg); margin-bottom: 2px; }
+.split-meta { display: flex; gap: var(--s-3); flex-wrap: wrap; font-size: var(--fs-sm); color: var(--text-secondary); }
+.split-meta span { display: inline-flex; align-items: center; gap: 4px; }
+.split-meta i { width: 14px; height: 14px; }
+.split-total { text-align: right; font-weight: 700; font-size: var(--fs-lg); }
+
+.split-participants {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+}
+.split-participant {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  background: var(--bg-muted);
+  border-radius: var(--r-md);
+  border: 1px solid transparent;
+}
+.split-participant.is-settled {
+  background: var(--color-success-soft);
+  border-color: var(--color-success);
+}
+.split-participant.is-paid-by {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+}
+.sp-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  flex-shrink: 0;
+}
+.sp-info { flex: 1; min-width: 0; }
+.sp-name { font-weight: 500; font-size: var(--fs-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sp-share { font-size: var(--fs-xs); color: var(--text-secondary); }
+.sp-toggle {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  background: var(--bg-surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--t-fast);
+}
+.sp-toggle.is-settled {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: #fff;
+}
+.sp-toggle.is-settled i { width: 14px; height: 14px; }
+
+.split-actions {
+  display: flex;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+  padding-top: var(--s-3);
+  border-top: 1px solid var(--border-default);
+}
+
+.split-summary-card {
+  padding: var(--s-4);
+  border-radius: var(--r-lg);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+}
+.split-summary-card .label {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.split-summary-card .value {
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  margin-top: 6px;
+}
+.split-summary-card.owed { border-left: 4px solid var(--color-success); }
+.split-summary-card.owe  { border-left: 4px solid var(--color-danger); }
+.split-summary-card.net  { border-left: 4px solid var(--color-primary); }
+
+/* Split modal */
+.split-form-participants {
+  border: 1px solid var(--border-default);
+  border-radius: var(--r-md);
+  padding: var(--s-2);
+  max-height: 240px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+.split-form-participant {
+  display: grid;
+  grid-template-columns: 24px 1fr 120px;
+  gap: var(--s-2);
+  align-items: center;
+  padding: 6px;
+  border-radius: var(--r-sm);
+}
+.split-form-participant:hover { background: var(--bg-hover); }
+.split-form-participant input[type="number"] {
+  font-size: var(--fs-sm);
+  padding: 4px 8px;
+}
+.split-form-participant.is-paid-by { background: var(--color-primary-soft); }
+
+.friends-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  max-height: 360px;
+  overflow-y: auto;
+}
+.friend-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  background: var(--bg-muted);
+  border-radius: var(--r-md);
+}
+.friend-row .sp-avatar { width: 36px; height: 36px; font-size: var(--fs-md); }
+.friend-row-name { flex: 1; font-weight: 500; }

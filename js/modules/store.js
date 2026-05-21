@@ -122,6 +122,55 @@ export function deleteWallet(id) {
   commit();
 }
 
+// Friends
+export function addFriend(f) {
+  f.id = 'f' + Date.now();
+  if (!state.data.friends) state.data.friends = [];
+  state.data.friends.push(f);
+  commit();
+  return f;
+}
+export function updateFriend(id, patch) {
+  const i = state.data.friends.findIndex(f => f.id === id);
+  if (i < 0) return null;
+  state.data.friends[i] = { ...state.data.friends[i], ...patch };
+  commit();
+  return state.data.friends[i];
+}
+export function deleteFriend(id) {
+  state.data.friends = (state.data.friends || []).filter(f => f.id !== id);
+  commit();
+}
+
+// Splits
+export function addSplit(s) {
+  s.id = 's' + Date.now();
+  if (!state.data.splits) state.data.splits = [];
+  state.data.splits.unshift(s);
+  commit();
+  return s;
+}
+export function updateSplit(id, patch) {
+  const i = state.data.splits.findIndex(s => s.id === id);
+  if (i < 0) return null;
+  state.data.splits[i] = { ...state.data.splits[i], ...patch };
+  commit();
+  return state.data.splits[i];
+}
+export function deleteSplit(id) {
+  state.data.splits = (state.data.splits || []).filter(s => s.id !== id);
+  commit();
+}
+export function toggleSettlement(splitId, participantId) {
+  const s = state.data.splits.find(x => x.id === splitId);
+  if (!s) return;
+  const p = s.participants.find(x => x.id === participantId);
+  if (!p) return;
+  p.settled = !p.settled;
+  commit();
+  return s;
+}
+
 // Preferences
 export function setPreference(key, value) {
   state.preferences[key] = value;
@@ -173,7 +222,9 @@ function mergeWithSeed(value) {
       wallets: Array.isArray(value.data?.wallets) ? value.data.wallets : seed.data.wallets,
       transactions: Array.isArray(value.data?.transactions) ? value.data.transactions : seed.data.transactions,
       goals: Array.isArray(value.data?.goals) ? value.data.goals : seed.data.goals,
-      budgets: Array.isArray(value.data?.budgets) ? value.data.budgets : seed.data.budgets
+      budgets: Array.isArray(value.data?.budgets) ? value.data.budgets : seed.data.budgets,
+      friends: Array.isArray(value.data?.friends) ? value.data.friends : seed.data.friends,
+      splits: Array.isArray(value.data?.splits) ? value.data.splits : seed.data.splits
     }
   };
 }

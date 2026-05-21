@@ -4,16 +4,31 @@ import { getState, setAuth } from './store.js';
 import { toggleTheme, getTheme } from './theme.js';
 import { mountIcons } from './icons.js';
 import { escapeHTML } from './format.js';
+import { registerServiceWorker, initInstallPrompt, initOfflineBadge, promptInstall, canInstall } from './pwa.js';
+import { t, applyLang, mountLangSwitch } from './i18n.js';
 
 const NAV = [
-  { key: 'dashboard',    label: 'Tổng quan',   icon: 'layout-dashboard', href: 'dashboard.html' },
-  { key: 'transactions', label: 'Giao dịch',   icon: 'arrow-left-right', href: 'transactions.html' },
-  { key: 'budgets',      label: 'Ngân sách',   icon: 'wallet-cards',     href: 'budgets.html' },
-  { key: 'goals',        label: 'Mục tiêu',    icon: 'target',           href: 'goals.html' },
-  { key: 'reports',      label: 'Báo cáo',     icon: 'bar-chart-3',      href: 'reports.html' },
-  { key: 'accounts',     label: 'Ví & TK',     icon: 'landmark',         href: 'accounts.html' },
-  { key: 'settings',     label: 'Cài đặt',     icon: 'settings',         href: 'settings.html' }
+  { key: 'dashboard',    i18n: 'app.nav.dashboard',    icon: 'layout-dashboard', href: 'dashboard.html' },
+  { key: 'transactions', i18n: 'app.nav.transactions', icon: 'arrow-left-right', href: 'transactions.html' },
+  { key: 'budgets',      i18n: 'app.nav.budgets',      icon: 'wallet-cards',     href: 'budgets.html' },
+  { key: 'goals',        i18n: 'app.nav.goals',        icon: 'target',           href: 'goals.html' },
+  { key: 'reports',      i18n: 'app.nav.reports',      icon: 'bar-chart-3',      href: 'reports.html' },
+  { key: 'accounts',     i18n: 'app.nav.accounts',     icon: 'landmark',         href: 'accounts.html' },
+  { key: 'splits',       i18n: 'app.nav.splits',       icon: 'users',            href: 'splits.html' },
+  { key: 'settings',     i18n: 'app.nav.settings',     icon: 'settings',         href: 'settings.html' }
 ];
+
+// Map active page → i18n key for topbar title, so it auto-updates on lang change
+const PAGE_TITLE_KEY = {
+  dashboard: 'app.nav.dashboard',
+  transactions: 'app.nav.transactions',
+  budgets: 'app.nav.budgets',
+  goals: 'app.nav.goals',
+  reports: 'app.nav.reports',
+  accounts: 'acc.title',
+  splits: 'split.title',
+  settings: 'set.title'
+};
 
 export function renderShell({ activePage, title, subtitle = '' }) {
   const state = getState();
@@ -35,7 +50,7 @@ export function renderShell({ activePage, title, subtitle = '' }) {
       ${NAV.map(n => `
         <a href="${n.href}" class="sidebar-link ${n.key === activePage ? 'is-active' : ''}">
           <i data-lucide="${n.icon}"></i>
-          <span>${n.label}</span>
+          <span data-i18n="${n.i18n}">${t(n.i18n)}</span>
         </a>
       `).join('')}
     </nav>
@@ -57,14 +72,16 @@ export function renderShell({ activePage, title, subtitle = '' }) {
   topbar.innerHTML = `
     <button class="icon-btn hamburger" id="hamburger" aria-label="Mở menu"><i data-lucide="menu"></i></button>
     <div>
-      <div class="topbar-title">${escapeHTML(title || '')}</div>
+      <div class="topbar-title" id="topbar-title"${PAGE_TITLE_KEY[activePage] ? ` data-i18n="${PAGE_TITLE_KEY[activePage]}"` : ''}>${escapeHTML(title || '')}</div>
       ${subtitle ? `<div class="text-muted fs-xs">${escapeHTML(subtitle)}</div>` : ''}
     </div>
     <div class="topbar-search">
       <i data-lucide="search"></i>
-      <input id="topbar-search" type="search" placeholder="Tìm kiếm giao dịch, danh mục..." aria-label="Tìm kiếm" />
+      <input id="topbar-search" type="search" placeholder="${t('app.topbar.search')}" aria-label="${t('app.topbar.search')}" data-i18n-attr="placeholder" data-i18n-key="app.topbar.search" />
     </div>
     <div class="topbar-actions">
+      <div class="lang-switch lang-switch-topbar" id="topbar-lang-switch"></div>
+      <button class="icon-btn" id="pwa-install-btn" aria-label="Cài đặt ứng dụng" title="Cài đặt ứng dụng" hidden><i data-lucide="download"></i></button>
       <button class="icon-btn" id="theme-toggle" aria-label="Đổi giao diện"><i data-lucide="${themeIcon}"></i></button>
       <button class="icon-btn" aria-label="Thông báo"><i data-lucide="bell"></i><span class="badge-dot"></span></button>
       <div class="dropdown" id="user-menu">
@@ -91,6 +108,14 @@ export function renderShell({ activePage, title, subtitle = '' }) {
 
   mountIcons();
   bindShellEvents();
+
+  // Mount language switcher in topbar then apply current language to all tagged elements
+  mountLangSwitch(document.getElementById('topbar-lang-switch'));
+  applyLang();
+
+  registerServiceWorker();
+  initInstallPrompt();
+  initOfflineBadge();
 }
 
 function bindShellEvents() {
@@ -128,6 +153,13 @@ function bindShellEvents() {
     backdrop.classList.remove('is-open');
   });
 
+  const installBtn = document.getElementById('pwa-install-btn');
+  installBtn?.addEventListener('click', async () => {
+    const ok = await promptInstall();
+    if (ok) installBtn.hidden = true;
+  });
+  if (canInstall() && installBtn) installBtn.hidden = false;
+
   themeBtn?.addEventListener('click', () => {
     toggleTheme();
     const icon = getTheme() === 'dark' ? 'sun' : 'moon';
@@ -142,10 +174,10 @@ function bindShellEvents() {
     menu = document.createElement('div');
     menu.className = 'dropdown-menu';
     menu.innerHTML = `
-      <a href="settings.html" class="dropdown-item"><i data-lucide="user"></i>Hồ sơ</a>
-      <a href="settings.html" class="dropdown-item"><i data-lucide="settings"></i>Cài đặt</a>
+      <a href="settings.html" class="dropdown-item"><i data-lucide="user"></i>${t('app.menu.profile')}</a>
+      <a href="settings.html" class="dropdown-item"><i data-lucide="settings"></i>${t('app.menu.settings')}</a>
       <div class="dropdown-divider"></div>
-      <button class="dropdown-item" id="logout-btn"><i data-lucide="log-out"></i>Đăng xuất</button>
+      <button class="dropdown-item" id="logout-btn"><i data-lucide="log-out"></i>${t('app.menu.logout')}</button>
     `;
     userMenu.appendChild(menu);
     mountIcons();

@@ -1,17 +1,28 @@
-// format.js — VND, date, percent helpers
+// format.js — money, date, percent helpers
+// Money formatters delegate to i18n so display follows the selected currency.
+
+import { formatCurrency, fromBaseVND, getCurrency } from './i18n.js';
 
 export function formatVND(n) {
-  if (n == null || isNaN(n)) return '0 ₫';
-  return Math.round(n).toLocaleString('vi-VN') + ' ₫';
+  if (n == null || isNaN(n)) n = 0;
+  return formatCurrency(n, getCurrency());
 }
 
 export function formatVNDShort(n) {
   if (n == null || isNaN(n)) return '0';
-  const abs = Math.abs(n);
-  if (abs >= 1e9) return (n / 1e9).toFixed(1).replace(/\.0$/, '') + ' tỷ';
-  if (abs >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + ' tr';
-  if (abs >= 1e3) return (n / 1e3).toFixed(0) + 'K';
-  return String(n);
+  const cur = getCurrency();
+  const value = fromBaseVND(n, cur);
+  const abs = Math.abs(value);
+  if (cur === 'VND') {
+    if (abs >= 1e9) return (value / 1e9).toFixed(1).replace(/\.0$/, '') + ' tỷ';
+    if (abs >= 1e6) return (value / 1e6).toFixed(1).replace(/\.0$/, '') + ' tr';
+    if (abs >= 1e3) return (value / 1e3).toFixed(0) + 'K';
+    return String(value);
+  }
+  // For USD/TWD: use thousand-scale K/M
+  if (abs >= 1e6) return (value / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+  if (abs >= 1e3) return (value / 1e3).toFixed(1).replace(/\.0$/, '') + 'K';
+  return String(value);
 }
 
 export function formatSigned(amount, type) {

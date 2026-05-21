@@ -4,8 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cài đặt — QLTC</title>
-  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);var P={indigo:['#4F46E5','#4338CA'],emerald:['#10B981','#059669'],rose:['#E11D48','#BE123C'],amber:['#F59E0B','#D97706'],ocean:['#0EA5E9','#0284C7'],violet:['#8B5CF6','#7C3AED'],slate:['#475569','#334155']};var pk=localStorage.getItem('theme.preset')||'indigo';var c=pk==='custom'?(localStorage.getItem('theme.custom')||'#4F46E5'):(P[pk]?P[pk][0]:'#4F46E5');var h=pk==='custom'?c:(P[pk]?P[pk][1]:'#4338CA');var n=parseInt(c.slice(1),16);var r=(n>>16)&255,g=(n>>8)&255,b=n&255;document.documentElement.style.setProperty('--color-primary',c);document.documentElement.style.setProperty('--color-primary-hover',h);document.documentElement.style.setProperty('--color-primary-soft','rgba('+r+','+g+','+b+',0.12)');}catch(e){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4F46E5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="QLTC">
+  <link rel="apple-touch-icon" href="assets/images/brand.png">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
@@ -16,51 +22,72 @@
   <section id="page-settings">
     <div class="page-header">
       <div>
-        <h1>Cài đặt</h1>
-        <div class="subtitle">Tùy chỉnh trải nghiệm của bạn</div>
+        <h1 data-i18n="set.title">Cài đặt</h1>
+        <div class="subtitle" data-i18n="set.subtitle">Tùy chỉnh trải nghiệm của bạn</div>
       </div>
     </div>
 
     <div class="grid grid-main">
       <div class="flex-col">
         <div class="card">
-          <div class="card-header"><div class="card-title">Hồ sơ</div></div>
+          <div class="card-header"><div class="card-title" data-i18n="set.profile">Hồ sơ</div></div>
           <div class="form-field">
-            <label class="form-label">Họ và tên</label>
+            <label class="form-label" data-i18n="set.name">Họ và tên</label>
             <input class="input" id="s-name" />
           </div>
           <div class="form-field">
-            <label class="form-label">Email</label>
+            <label class="form-label" data-i18n="set.email">Email</label>
             <input class="input" id="s-email" type="email" />
           </div>
-          <button class="btn btn-primary" id="save-profile">Lưu hồ sơ</button>
+          <button class="btn btn-primary" id="save-profile" data-i18n="set.save.profile">Lưu hồ sơ</button>
         </div>
 
         <div class="card">
-          <div class="card-header"><div class="card-title">Giao diện</div></div>
+          <div class="card-header"><div class="card-title" data-i18n="set.appearance">Giao diện</div></div>
           <div class="setting-row">
             <div>
-              <div class="font-semibold">Chế độ tối</div>
-              <div class="text-muted fs-sm">Bật để giảm mỏi mắt vào ban đêm</div>
+              <div class="font-semibold" data-i18n="set.dark">Chế độ tối</div>
+              <div class="text-muted fs-sm" data-i18n="set.dark.desc">Bật để giảm mỏi mắt vào ban đêm</div>
             </div>
             <label class="switch"><input type="checkbox" id="s-dark"><span class="slider"></span></label>
           </div>
+
+          <div class="setting-row column">
+            <div>
+              <div class="font-semibold" data-i18n="set.preset">Tông màu chủ đạo</div>
+              <div class="text-muted fs-sm" data-i18n="set.preset.desc">Chọn preset hoặc tự pha màu yêu thích</div>
+            </div>
+            <div class="theme-presets" id="theme-presets"></div>
+          </div>
+
+          <div class="setting-row column" id="custom-color-row" hidden>
+            <div>
+              <div class="font-semibold" data-i18n="set.custom">Màu tùy chỉnh</div>
+              <div class="text-muted fs-sm" data-i18n="set.custom.desc">Chọn mã hex hoặc dùng color picker</div>
+            </div>
+            <div class="flex" style="align-items:center;gap:var(--s-3);">
+              <input type="color" id="s-custom-color" class="color-input" />
+              <input type="text" class="input" id="s-custom-hex" maxlength="7" style="max-width:120px;font-family:monospace;" />
+            </div>
+          </div>
         </div>
 
         <div class="card">
-          <div class="card-header"><div class="card-title">Tùy chọn chung</div></div>
+          <div class="card-header"><div class="card-title" data-i18n="set.general">Tùy chọn chung</div></div>
           <div class="form-field">
-            <label class="form-label">Ngôn ngữ</label>
+            <label class="form-label" data-i18n="set.lang">Ngôn ngữ</label>
             <select class="select" id="s-lang">
               <option value="vi">Tiếng Việt</option>
-              <option value="en">English (sắp ra mắt)</option>
+              <option value="en">English</option>
+              <option value="zh">繁體中文</option>
             </select>
           </div>
           <div class="form-field">
-            <label class="form-label">Đơn vị tiền tệ</label>
+            <label class="form-label" data-i18n="set.currency">Đơn vị tiền tệ</label>
             <select class="select" id="s-currency">
               <option value="VND">VND (₫)</option>
-              <option value="USD">USD ($) (sắp ra mắt)</option>
+              <option value="USD">USD ($)</option>
+              <option value="TWD">TWD (NT$)</option>
             </select>
           </div>
         </div>
@@ -68,19 +95,19 @@
 
       <div class="flex-col">
         <div class="card">
-          <div class="card-header"><div class="card-title">Dữ liệu</div></div>
-          <p class="text-secondary fs-sm" style="margin-bottom: var(--s-3);">Sao lưu hoặc khôi phục dữ liệu của bạn (lưu cục bộ trên trình duyệt).</p>
+          <div class="card-header"><div class="card-title" data-i18n="set.data">Dữ liệu</div></div>
+          <p class="text-secondary fs-sm" style="margin-bottom: var(--s-3);" data-i18n="set.data.desc">Sao lưu hoặc khôi phục dữ liệu của bạn (lưu cục bộ trên trình duyệt).</p>
           <div class="flex" style="flex-wrap: wrap;">
-            <button class="btn btn-secondary" id="export-data"><i data-lucide="download"></i>Xuất JSON</button>
-            <button class="btn btn-secondary" id="import-data"><i data-lucide="upload"></i>Nhập JSON</button>
+            <button class="btn btn-secondary" id="export-data"><i data-lucide="download"></i><span data-i18n="set.export">Xuất JSON</span></button>
+            <button class="btn btn-secondary" id="import-data"><i data-lucide="upload"></i><span data-i18n="set.import">Nhập JSON</span></button>
             <input type="file" id="import-file" accept="application/json" hidden />
-            <button class="btn btn-danger" id="reset-data"><i data-lucide="refresh-cw"></i>Khôi phục mặc định</button>
+            <button class="btn btn-danger" id="reset-data"><i data-lucide="refresh-cw"></i><span data-i18n="set.reset">Khôi phục mặc định</span></button>
           </div>
         </div>
 
         <div class="card">
-          <div class="card-header"><div class="card-title">Về ứng dụng</div></div>
-          <p class="text-secondary fs-sm">Quản lý Tài chính Cá nhân — phiên bản demo UI</p>
+          <div class="card-header"><div class="card-title" data-i18n="set.about">Về ứng dụng</div></div>
+          <p class="text-secondary fs-sm" data-i18n="set.about.desc">Quản lý Tài chính Cá nhân — phiên bản demo UI</p>
           <p class="text-muted fs-xs">v1.0 · Frontend Only · HTML/CSS/JS Vanilla</p>
         </div>
       </div>

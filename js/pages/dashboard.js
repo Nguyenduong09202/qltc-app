@@ -3,13 +3,14 @@ import { initStore, getState, getCategoryById, getWalletById } from '../modules/
 import { renderShell } from '../modules/shell.js';
 import { requireAuth } from '../modules/router.js';
 import { formatVND, formatVNDShort, formatDate, formatSigned, formatChange, escapeHTML } from '../modules/format.js';
+import { t } from '../modules/i18n.js';
 import { createChart, getChartColors, destroyAllCharts } from '../modules/charts.js';
 import { mountIcons } from '../modules/icons.js';
 import { openModal } from '../modules/ui.js';
 
 initStore();
 if (!requireAuth()) { /* redirected */ }
-renderShell({ activePage: 'dashboard', title: 'Tổng quan' });
+renderShell({ activePage: 'dashboard', title: t('app.nav.dashboard') });
 
 const state = getState();
 const tx = state.data.transactions;
@@ -19,15 +20,16 @@ const userName = state.auth?.user?.name || 'bạn';
 const firstName = userName.trim().split(/\s+/).pop();
 const welcomeEl = document.getElementById('welcome-title');
 const insightEl = document.getElementById('welcome-insight');
-if (welcomeEl) {
+function renderWelcome() {
+  if (!welcomeEl) return;
   const h = new Date().getHours();
-  let greet = 'Chào mừng trở lại', emoji = '👋';
-  if (h >= 5 && h < 11)       { greet = 'Chào buổi sáng';  emoji = '🌅'; }
-  else if (h >= 11 && h < 17) { greet = 'Chào buổi chiều'; emoji = '☀️'; }
-  else if (h >= 17 && h < 22) { greet = 'Chào buổi tối';   emoji = '🌆'; }
-  else                         { greet = 'Khuya rồi';       emoji = '🌙'; }
-  welcomeEl.innerHTML = `${greet}, ${escapeHTML(firstName)} ${emoji}`;
+  let greetKey = 'greet.morning', emoji = '🌅';
+  if (h >= 11 && h < 17) { greetKey = 'greet.afternoon'; emoji = '☀️'; }
+  else if (h >= 17 && h < 22) { greetKey = 'greet.evening'; emoji = '🌆'; }
+  else if (h < 5 || h >= 22) { greetKey = 'greet.evening'; emoji = '🌙'; }
+  welcomeEl.innerHTML = `${t(greetKey)}, ${escapeHTML(firstName)} ${emoji}`;
 }
+renderWelcome();
 
 // Smart insight: compare this week vs last week, pick most interesting fact
 function computeInsight() {
@@ -43,7 +45,7 @@ function computeInsight() {
   const thisExpSum = thisExp.reduce((s, t) => s + t.amount, 0);
   const lastExpSum = lastExp.reduce((s, t) => s + t.amount, 0);
 
-  if (lastExpSum === 0 && thisExpSum === 0) return 'Bắt đầu ghi giao dịch để xem xu hướng chi tiêu của bạn.';
+  if (lastExpSum === 0 && thisExpSum === 0) return t('insight.balanced');
 
   // Find top category change
   const byCat = (arr) => arr.reduce((m, t) => { m[t.categoryId] = (m[t.categoryId] || 0) + t.amount; return m; }, {});
@@ -62,20 +64,18 @@ function computeInsight() {
   // Pick the most "interesting" message
   if (topId && Math.abs(topDelta) > 200000) {
     const cat = getCategoryById(topId);
-    const dir = topDelta > 0 ? 'nhiều hơn' : 'ít hơn';
-    const pct = lastCat[topId] > 0 ? Math.round((Math.abs(topDelta) / lastCat[topId]) * 100) : null;
     const emoji = topDelta > 0 ? '👀' : '👍';
-    return `Tuần này bạn chi <strong>${escapeHTML(cat?.name || 'một danh mục')}</strong> ${dir} ${pct ? `<strong>${pct}%</strong> ` : ''}so với tuần trước ${emoji}`;
+    const catName = `<strong>${escapeHTML(cat?.name || '—')}</strong>`;
+    return t('insight.spend.more').replace('{cat}', catName) + ' ' + emoji;
   }
   if (savings > lastSavings && lastSavings >= 0) {
-    return `Tiết kiệm tuần này <strong>+${formatVND(savings - lastSavings)}</strong> so với tuần trước 🎯`;
+    const amt = `<strong>+${formatVND(savings - lastSavings)}</strong>`;
+    return t('insight.save.up').replace('{amt}', amt);
   }
-  if (Math.abs(expPct) > 10) {
-    return `Chi tiêu tuần này ${expPct > 0 ? 'tăng' : 'giảm'} <strong>${Math.abs(Math.round(expPct))}%</strong> so với tuần trước ${expPct > 0 ? '⚠️' : '✨'}`;
-  }
-  return 'Đây là bức tranh tài chính của bạn hôm nay.';
+  return t('insight.balanced');
 }
-if (insightEl) insightEl.innerHTML = computeInsight();
+function renderInsight() { if (insightEl) insightEl.innerHTML = computeInsight(); }
+renderInsight();
 
 function sumByPeriod(start, end, type) {
   return tx
@@ -87,12 +87,12 @@ function sumByPeriod(start, end, type) {
 function presetRange(key) {
   const now = new Date();
   const y = now.getFullYear(), m = now.getMonth();
-  if (key === 'month')     return { start: new Date(y, m, 1),     end: now,                  prevStart: new Date(y, m - 1, 1), prevEnd: new Date(y, m, 1),  label: 'Tháng này' };
-  if (key === 'lastMonth') return { start: new Date(y, m - 1, 1), end: new Date(y, m, 1),    prevStart: new Date(y, m - 2, 1), prevEnd: new Date(y, m - 1, 1), label: 'Tháng trước' };
-  if (key === 'year')      return { start: new Date(y, 0, 1),     end: now,                  prevStart: new Date(y - 1, 0, 1), prevEnd: new Date(y, 0, 1),  label: 'Năm nay' };
-  if (key === '7d')        { const s = new Date(now); s.setDate(s.getDate() - 7); const ps = new Date(s); ps.setDate(ps.getDate() - 7); return { start: s, end: now, prevStart: ps, prevEnd: s, label: '7 ngày qua' }; }
-  if (key === '30d')       { const s = new Date(now); s.setDate(s.getDate() - 30); const ps = new Date(s); ps.setDate(ps.getDate() - 30); return { start: s, end: now, prevStart: ps, prevEnd: s, label: '30 ngày qua' }; }
-  if (key === '90d')       { const s = new Date(now); s.setDate(s.getDate() - 90); const ps = new Date(s); ps.setDate(ps.getDate() - 90); return { start: s, end: now, prevStart: ps, prevEnd: s, label: '90 ngày qua' }; }
+  if (key === 'month')     return { start: new Date(y, m, 1),     end: now,                  prevStart: new Date(y, m - 1, 1), prevEnd: new Date(y, m, 1),  label: t('period.thismonth'), key };
+  if (key === 'lastMonth') return { start: new Date(y, m - 1, 1), end: new Date(y, m, 1),    prevStart: new Date(y, m - 2, 1), prevEnd: new Date(y, m - 1, 1), label: t('period.lastmonth'), key };
+  if (key === 'year')      return { start: new Date(y, 0, 1),     end: now,                  prevStart: new Date(y - 1, 0, 1), prevEnd: new Date(y, 0, 1),  label: t('period.thisyear'), key };
+  if (key === '7d')        { const s = new Date(now); s.setDate(s.getDate() - 7); const ps = new Date(s); ps.setDate(ps.getDate() - 7); return { start: s, end: now, prevStart: ps, prevEnd: s, label: t('period.last7'), key }; }
+  if (key === '30d')       { const s = new Date(now); s.setDate(s.getDate() - 30); const ps = new Date(s); ps.setDate(ps.getDate() - 30); return { start: s, end: now, prevStart: ps, prevEnd: s, label: t('period.last30'), key }; }
+  if (key === '90d')       { const s = new Date(now); s.setDate(s.getDate() - 90); const ps = new Date(s); ps.setDate(ps.getDate() - 90); return { start: s, end: now, prevStart: ps, prevEnd: s, label: t('period.last90'), key }; }
   return presetRange('month');
 }
 
@@ -187,15 +187,15 @@ function renderStats() {
   document.getElementById('hero-card').innerHTML = `
     <div class="hero-stat" style="--stagger:0ms">
       <div class="hero-stat-left">
-        <div class="hero-stat-label"><i data-lucide="wallet"></i> Tổng tài sản · ${label}</div>
+        <div class="hero-stat-label"><i data-lucide="wallet"></i> ${t('dash.hero.total')} · ${label}</div>
         <div class="hero-stat-value" data-target="${totalBalance}">${formatVND(0)}</div>
         <div class="hero-stat-badges">
           <span class="hero-badge ${netChange.dir}">
             <i data-lucide="${netChange.dir === 'up' ? 'trending-up' : netChange.dir === 'down' ? 'trending-down' : 'minus'}"></i>
-            ${netChange.text} so với kỳ trước
+            ${netChange.text} ${t('dash.hero.vs.prev')}
           </span>
-          <span class="hero-badge neutral"><i data-lucide="receipt"></i> ${txCount} giao dịch</span>
-          <span class="hero-badge ${savings >= 0 ? 'positive' : 'negative'}"><i data-lucide="${savings >= 0 ? 'piggy-bank' : 'alert-triangle'}"></i> ${savings >= 0 ? 'Tiết kiệm' : 'Âm'} ${formatVND(Math.abs(savings))}</span>
+          <span class="hero-badge neutral"><i data-lucide="receipt"></i> ${txCount} ${t('dash.hero.tx.count')}</span>
+          <span class="hero-badge ${savings >= 0 ? 'positive' : 'negative'}"><i data-lucide="${savings >= 0 ? 'piggy-bank' : 'alert-triangle'}"></i> ${savings >= 0 ? t('dash.hero.saving') : t('dash.hero.negative')} ${formatVND(Math.abs(savings))}</span>
         </div>
       </div>
       <div class="hero-stat-right">
@@ -206,9 +206,9 @@ function renderStats() {
 
   // -------- Mini cards --------
   const minis = [
-    { label: `Thu ${sl}`,        value: income,  tone: 'success', icon: 'arrow-down-circle', change: formatChange(income, incomePrev),  sparkType: 'income',  sparkColor: colors.success },
-    { label: `Chi ${sl}`,        value: expense, tone: 'danger',  icon: 'arrow-up-circle',   change: formatChange(expense, expensePrev), sparkType: 'expense', sparkColor: colors.danger  },
-    { label: 'Tiết kiệm ròng',    value: savings, tone: 'warning', icon: 'piggy-bank',        change: null,                              sparkType: 'savings', sparkColor: '#F59E0B'      }
+    { label: `${t('dash.mini.income')} ${sl}`,  value: income,  tone: 'success', icon: 'arrow-down-circle', change: formatChange(income, incomePrev),  sparkType: 'income',  sparkColor: colors.success },
+    { label: `${t('dash.mini.expense')} ${sl}`, value: expense, tone: 'danger',  icon: 'arrow-up-circle',   change: formatChange(expense, expensePrev), sparkType: 'expense', sparkColor: colors.danger  },
+    { label: t('dash.mini.netsaving'),          value: savings, tone: 'warning', icon: 'piggy-bank',        change: null,                              sparkType: 'savings', sparkColor: '#F59E0B'      }
   ];
   document.getElementById('mini-cards').innerHTML = minis.map((s, i) => `
     <div class="mini-card" style="--stagger:${(i + 1) * 80}ms">
@@ -244,38 +244,38 @@ function openPeriodPicker() {
   const toInputMonth = (d) => d.toISOString().slice(0, 7);
   const body = `
     <div class="period-picker">
-      <div class="form-label">Chọn nhanh</div>
+      <div class="form-label">${t('picker.quick')}</div>
       <div class="period-chips">
-        <button type="button" class="chip" data-preset="month">Tháng này</button>
-        <button type="button" class="chip" data-preset="lastMonth">Tháng trước</button>
-        <button type="button" class="chip" data-preset="year">Năm nay</button>
-        <button type="button" class="chip" data-preset="7d">7 ngày qua</button>
-        <button type="button" class="chip" data-preset="30d">30 ngày qua</button>
-        <button type="button" class="chip" data-preset="90d">90 ngày qua</button>
+        <button type="button" class="chip" data-preset="month">${t('period.thismonth')}</button>
+        <button type="button" class="chip" data-preset="lastMonth">${t('period.lastmonth')}</button>
+        <button type="button" class="chip" data-preset="year">${t('period.thisyear')}</button>
+        <button type="button" class="chip" data-preset="7d">${t('period.last7')}</button>
+        <button type="button" class="chip" data-preset="30d">${t('period.last30')}</button>
+        <button type="button" class="chip" data-preset="90d">${t('period.last90')}</button>
       </div>
       <div class="form-field" style="margin-top:var(--s-4);">
-        <label class="form-label">Theo tháng cụ thể</label>
+        <label class="form-label">${t('picker.bymonth')}</label>
         <input class="input" type="month" id="pp-month" value="${toInputMonth(new Date())}" />
       </div>
-      <div class="form-label" style="margin-top:var(--s-4);">Tùy chỉnh theo ngày</div>
+      <div class="form-label" style="margin-top:var(--s-4);">${t('picker.bydate')}</div>
       <div class="form-row">
         <div class="form-field">
-          <label class="form-label">Từ ngày</label>
+          <label class="form-label">${t('picker.from')}</label>
           <input class="input" type="date" id="pp-from" value="${toInputDate(currentRange.start)}" />
         </div>
         <div class="form-field">
-          <label class="form-label">Đến ngày</label>
+          <label class="form-label">${t('picker.to')}</label>
           <input class="input" type="date" id="pp-to" value="${toInputDate(currentRange.end)}" />
         </div>
       </div>
     </div>
   `;
   openModal({
-    title: 'Chọn khoảng thời gian',
+    title: t('picker.title'),
     body,
     actions: `
-      <button class="btn btn-secondary" data-close>Hủy</button>
-      <button class="btn btn-primary" id="pp-apply">Áp dụng</button>
+      <button class="btn btn-secondary" data-close>${t('common.cancel')}</button>
+      <button class="btn btn-primary" id="pp-apply">${t('picker.apply')}</button>
     `
   });
   setTimeout(() => {
@@ -291,7 +291,7 @@ function openPeriodPicker() {
       const s = new Date(yy, mm - 1, 1);
       const en = new Date(yy, mm, 1);
       const ps = new Date(yy, mm - 2, 1);
-      currentRange = { start: s, end: en, prevStart: ps, prevEnd: s, label: `Tháng ${String(mm).padStart(2,'0')}/${yy}` };
+      currentRange = { start: s, end: en, prevStart: ps, prevEnd: s, label: `${t('common.month')} ${String(mm).padStart(2,'0')}/${yy}` };
     });
     document.getElementById('pp-apply')?.addEventListener('click', () => {
       const from = document.getElementById('pp-from').value;
@@ -311,7 +311,7 @@ function openPeriodPicker() {
         const s = new Date(yy, mm - 1, 1);
         const en = new Date(yy, mm, 1);
         const ps = new Date(yy, mm - 2, 1);
-        currentRange = { start: s, end: en, prevStart: ps, prevEnd: s, label: `Tháng ${String(mm).padStart(2,'0')}/${yy}` };
+        currentRange = { start: s, end: en, prevStart: ps, prevEnd: s, label: `${t('common.month')} ${String(mm).padStart(2,'0')}/${yy}` };
       }
       document.querySelector('.modal-backdrop')?.remove();
       renderStats();
@@ -582,3 +582,10 @@ document.getElementById('top-goals').innerHTML = topGoals.map(g => {
 }).join('');
 
 mountIcons();
+
+// Re-render dynamic content on language/currency change
+function rerenderAll() {
+  try { renderStats(); renderTrend(30); renderActivityFeed(); } catch (e) {}
+}
+window.addEventListener('lang-changed', rerenderAll);
+window.addEventListener('currency-changed', rerenderAll);

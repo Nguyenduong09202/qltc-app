@@ -4,8 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Báo cáo — QLTC</title>
-  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);var P={indigo:['#4F46E5','#4338CA'],emerald:['#10B981','#059669'],rose:['#E11D48','#BE123C'],amber:['#F59E0B','#D97706'],ocean:['#0EA5E9','#0284C7'],violet:['#8B5CF6','#7C3AED'],slate:['#475569','#334155']};var pk=localStorage.getItem('theme.preset')||'indigo';var c=pk==='custom'?(localStorage.getItem('theme.custom')||'#4F46E5'):(P[pk]?P[pk][0]:'#4F46E5');var h=pk==='custom'?c:(P[pk]?P[pk][1]:'#4338CA');var n=parseInt(c.slice(1),16);var r=(n>>16)&255,g=(n>>8)&255,b=n&255;document.documentElement.style.setProperty('--color-primary',c);document.documentElement.style.setProperty('--color-primary-hover',h);document.documentElement.style.setProperty('--color-primary-soft','rgba('+r+','+g+','+b+',0.12)');}catch(e){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4F46E5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="QLTC">
+  <link rel="apple-touch-icon" href="assets/images/brand.png">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
@@ -18,13 +24,13 @@
   <section id="page-reports">
     <div class="page-header">
       <div>
-        <h1>Báo cáo</h1>
-        <div class="subtitle">Phân tích sâu hơn về tài chính của bạn</div>
+        <h1 data-i18n="report.title">Báo cáo</h1>
+        <div class="subtitle" data-i18n="report.subtitle">Phân tích sâu hơn về tài chính của bạn</div>
       </div>
       <div class="segmented" id="range-seg">
-        <button data-range="month" class="is-active">Tháng</button>
-        <button data-range="quarter">Quý</button>
-        <button data-range="year">Năm</button>
+        <button data-range="month" class="is-active" data-i18n="report.range.month">Tháng</button>
+        <button data-range="quarter" data-i18n="report.range.quarter">Quý</button>
+        <button data-range="year" data-i18n="report.range.year">Năm</button>
       </div>
     </div>
 
@@ -32,20 +38,20 @@
 
     <div class="grid grid-2" style="margin-top: var(--s-6);">
       <div class="card">
-        <div class="card-header"><div class="card-title">Thu chi theo tháng</div></div>
+        <div class="card-header"><div class="card-title" data-i18n="dash.trend.title">Thu chi theo tháng</div></div>
         <div style="height: 300px; position: relative;"><canvas id="chart-bar"></canvas></div>
       </div>
       <div class="card">
-        <div class="card-header"><div class="card-title">Chi tiêu theo danh mục</div></div>
+        <div class="card-header"><div class="card-title" data-i18n="report.bycategory">Chi tiêu theo danh mục</div></div>
         <div style="height: 300px; position: relative;"><canvas id="chart-cat"></canvas></div>
       </div>
     </div>
 
     <div class="card" style="margin-top: var(--s-6);">
-      <div class="card-header"><div class="card-title">Top 5 khoản chi lớn nhất</div></div>
+      <div class="card-header"><div class="card-title" data-i18n="report.top.spending">Top 5 khoản chi lớn nhất</div></div>
       <div class="table-wrap">
         <table class="table">
-          <thead><tr><th>Mô tả</th><th>Danh mục</th><th>Ngày</th><th class="text-right">Số tiền</th></tr></thead>
+          <thead><tr><th data-i18n="tx.col.note">Mô tả</th><th data-i18n="tx.col.category">Danh mục</th><th data-i18n="tx.col.date">Ngày</th><th class="text-right" data-i18n="tx.col.amount">Số tiền</th></tr></thead>
           <tbody id="top-spending"></tbody>
         </table>
       </div>

@@ -4,11 +4,12 @@ import { renderShell } from '../modules/shell.js';
 import { requireAuth } from '../modules/router.js';
 import { formatVND, formatVNDShort, formatDate, escapeHTML } from '../modules/format.js';
 import { createChart, getChartColors, destroyAllCharts } from '../modules/charts.js';
+import { t } from '../modules/i18n.js';
 import { mountIcons } from '../modules/icons.js';
 
 initStore();
 if (!requireAuth()) {}
-renderShell({ activePage: 'reports', title: 'Báo cáo' });
+renderShell({ activePage: 'reports', title: t('app.nav.reports') });
 
 let range = 'month';
 
@@ -37,10 +38,10 @@ function render() {
   const net = income - expense;
   const txCount = inRange.length;
   document.getElementById('r-summary').innerHTML = [
-    { label: 'Tổng thu', value: formatVND(income), icon: 'arrow-down-circle', tone: 'success' },
-    { label: 'Tổng chi', value: formatVND(expense), icon: 'arrow-up-circle', tone: 'danger' },
-    { label: 'Chênh lệch', value: formatVND(net), icon: 'scale', tone: net >= 0 ? 'success' : 'danger' },
-    { label: 'Số giao dịch', value: txCount, icon: 'list', tone: 'primary' }
+    { label: t('report.total.income'),  value: formatVND(income),  icon: 'arrow-down-circle', tone: 'success' },
+    { label: t('report.total.expense'), value: formatVND(expense), icon: 'arrow-up-circle',   tone: 'danger'  },
+    { label: t('report.net'),           value: formatVND(net),     icon: 'scale',             tone: net >= 0 ? 'success' : 'danger' },
+    { label: t('report.tx.count'),      value: txCount,            icon: 'list',              tone: 'primary' }
   ].map(s => `
     <div class="stat-card">
       <div class="stat-header"><div class="stat-label">${s.label}</div><div class="stat-icon ${s.tone}"><i data-lucide="${s.icon}"></i></div></div>
@@ -66,8 +67,8 @@ function render() {
     data: {
       labels,
       datasets: [
-        { label: 'Thu', data: incomeArr, backgroundColor: c.success, borderRadius: 6 },
-        { label: 'Chi', data: expenseArr, backgroundColor: c.danger, borderRadius: 6 }
+        { label: t('common.income'),  data: incomeArr,  backgroundColor: c.success, borderRadius: 6 },
+        { label: t('common.expense'), data: expenseArr, backgroundColor: c.danger,  borderRadius: 6 }
       ]
     },
     options: {
@@ -122,3 +123,5 @@ document.querySelectorAll('#range-seg button').forEach(b => {
 
 render();
 mountIcons();
+window.addEventListener('lang-changed', render);
+window.addEventListener('currency-changed', render);

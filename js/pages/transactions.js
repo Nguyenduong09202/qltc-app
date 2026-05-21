@@ -4,11 +4,12 @@ import { renderShell } from '../modules/shell.js';
 import { requireAuth } from '../modules/router.js';
 import { formatVND, formatSigned, formatDate, escapeHTML } from '../modules/format.js';
 import { showToast, openModal, confirmDialog } from '../modules/ui.js';
+import { getCurrencySymbol, toBaseVND, fromBaseVND, t } from '../modules/i18n.js';
 import { mountIcons } from '../modules/icons.js';
 
 initStore();
 if (!requireAuth()) {}
-renderShell({ activePage: 'transactions', title: 'Giao dịch' });
+renderShell({ activePage: 'transactions', title: t('app.nav.transactions') });
 
 const PAGE_SIZE = 10;
 let page = 1;
@@ -122,56 +123,56 @@ function renderPagination(total, pages) {
 // ---------- Modal: Add / Edit ----------
 function openTxModal(existing) {
   const isEdit = !!existing;
-  const t = existing || { type: 'expense', amount: '', walletId: state.data.wallets[0].id, categoryId: '', date: new Date().toISOString().slice(0, 10), note: '' };
-  const catOptions = (type) => state.data.categories.filter(c => c.type === type).map(c => `<option value="${c.id}" ${c.id === t.categoryId ? 'selected' : ''}>${escapeHTML(c.name)}</option>`).join('');
-  const walOptions = state.data.wallets.map(w => `<option value="${w.id}" ${w.id === t.walletId ? 'selected' : ''}>${escapeHTML(w.name)}</option>`).join('');
+  const tx = existing || { type: 'expense', amount: '', walletId: state.data.wallets[0].id, categoryId: '', date: new Date().toISOString().slice(0, 10), note: '' };
+  const catOptions = (type) => state.data.categories.filter(c => c.type === type).map(c => `<option value="${c.id}" ${c.id === tx.categoryId ? 'selected' : ''}>${escapeHTML(c.name)}</option>`).join('');
+  const walOptions = state.data.wallets.map(w => `<option value="${w.id}" ${w.id === tx.walletId ? 'selected' : ''}>${escapeHTML(w.name)}</option>`).join('');
 
   const body = `
     <form id="tx-form">
       <div class="form-field">
-        <label class="form-label">Loại giao dịch</label>
+        <label class="form-label">${t('tx.modal.type')}</label>
         <div class="segmented" id="seg-type">
-          <button type="button" data-type="expense" class="${t.type === 'expense' ? 'is-active' : ''}">Chi</button>
-          <button type="button" data-type="income" class="${t.type === 'income' ? 'is-active' : ''}">Thu</button>
+          <button type="button" data-type="expense" class="${tx.type === 'expense' ? 'is-active' : ''}">${t('common.expense')}</button>
+          <button type="button" data-type="income" class="${tx.type === 'income' ? 'is-active' : ''}">${t('common.income')}</button>
         </div>
       </div>
       <div class="form-field">
-        <label class="form-label">Số tiền (₫)</label>
-        <input class="input" id="f-amount" type="number" min="0" step="1000" required value="${t.amount || ''}" placeholder="0" />
+        <label class="form-label">${t('common.amount')} (${getCurrencySymbol()})</label>
+        <input class="input" id="f-amount" type="number" min="0" step="any" required value="${tx.amount ? fromBaseVND(tx.amount) : ''}" placeholder="0" />
       </div>
       <div class="form-row">
         <div class="form-field">
-          <label class="form-label">Danh mục</label>
-          <select class="select" id="f-cat">${catOptions(t.type)}</select>
+          <label class="form-label">${t('common.category')}</label>
+          <select class="select" id="f-cat">${catOptions(tx.type)}</select>
         </div>
         <div class="form-field">
-          <label class="form-label">Ví</label>
+          <label class="form-label">${t('common.wallet')}</label>
           <select class="select" id="f-wal">${walOptions}</select>
         </div>
       </div>
       <div class="form-field">
-        <label class="form-label">Ngày</label>
-        <input class="input" id="f-date" type="date" required value="${(t.date || '').slice(0, 10)}" />
+        <label class="form-label">${t('common.date')}</label>
+        <input class="input" id="f-date" type="date" required value="${(tx.date || '').slice(0, 10)}" />
       </div>
       <div class="form-field">
-        <label class="form-label">Ghi chú</label>
-        <textarea class="input" id="f-note" rows="2" placeholder="VD: Bữa trưa với khách hàng">${escapeHTML(t.note || '')}</textarea>
+        <label class="form-label">${t('common.note')}</label>
+        <textarea class="input" id="f-note" rows="2" placeholder="${t('tx.modal.note.placeholder')}">${escapeHTML(tx.note || '')}</textarea>
       </div>
     </form>
   `;
 
   openModal({
-    title: isEdit ? 'Sửa giao dịch' : 'Thêm giao dịch',
+    title: isEdit ? t('tx.modal.title.edit') : t('tx.modal.title.add'),
     body,
     actions: `
-      <button class="btn btn-secondary" data-close>Hủy</button>
-      <button class="btn btn-primary" id="btn-save">${isEdit ? 'Cập nhật' : 'Lưu'}</button>
+      <button class="btn btn-secondary" data-close>${t('common.cancel')}</button>
+      <button class="btn btn-primary" id="btn-save">${isEdit ? t('common.update') : t('common.save')}</button>
     `
   });
 
   // Bind type toggle
   setTimeout(() => {
-    let currentType = t.type;
+    let currentType = tx.type;
     document.querySelectorAll('#seg-type button').forEach(b => {
       b.addEventListener('click', () => {
         currentType = b.dataset.type;
@@ -183,16 +184,16 @@ function openTxModal(existing) {
     document.getElementById('btn-save').addEventListener('click', () => {
       const data = {
         type: currentType,
-        amount: parseFloat(document.getElementById('f-amount').value),
+        amount: toBaseVND(parseFloat(document.getElementById('f-amount').value)),
         categoryId: document.getElementById('f-cat').value,
         walletId: document.getElementById('f-wal').value,
         date: new Date(document.getElementById('f-date').value).toISOString(),
         note: document.getElementById('f-note').value.trim()
       };
-      if (!data.amount || data.amount <= 0) { showToast('Vui lòng nhập số tiền hợp lệ', 'error'); return; }
-      if (!data.categoryId) { showToast('Chọn danh mục', 'error'); return; }
-      if (isEdit) { updateTransaction(existing.id, data); showToast('Đã cập nhật giao dịch', 'success'); }
-      else { addTransaction(data); showToast('Đã thêm giao dịch', 'success'); }
+      if (!data.amount || data.amount <= 0) { showToast(t('goal.toast.empty.amt'), 'error'); return; }
+      if (!data.categoryId) { showToast(t('budget.toast.cat'), 'error'); return; }
+      if (isEdit) { updateTransaction(existing.id, data); showToast(t('budget.toast.updated'), 'success'); }
+      else { addTransaction(data); showToast(t('tx.modal.title.add'), 'success'); }
       document.querySelector('.modal-backdrop')?.remove();
       render();
     });
@@ -260,3 +261,5 @@ document.getElementById('pagination').addEventListener('click', (e) => {
 
 render();
 mountIcons();
+window.addEventListener('lang-changed', render);
+window.addEventListener('currency-changed', render);

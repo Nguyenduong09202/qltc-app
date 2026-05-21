@@ -3,12 +3,13 @@ import { initStore, getState, getCategoryById, addBudget, updateBudget, deleteBu
 import { renderShell } from '../modules/shell.js';
 import { requireAuth } from '../modules/router.js';
 import { formatVND, formatPercent, escapeHTML } from '../modules/format.js';
+import { getCurrencySymbol, toBaseVND, fromBaseVND, t, applyLang } from '../modules/i18n.js';
 import { showToast, openModal, confirmDialog, renderEmptyState } from '../modules/ui.js';
 import { mountIcons } from '../modules/icons.js';
 
 initStore();
 if (!requireAuth()) {}
-renderShell({ activePage: 'budgets', title: 'Ngân sách' });
+renderShell({ activePage: 'budgets', title: t('app.nav.budgets') });
 
 function computeSpent(b) {
   const start = new Date(b.startDate);
@@ -25,10 +26,10 @@ function render() {
   const remaining = Math.max(0, totalLimit - totalSpent);
 
   document.getElementById('b-summary').innerHTML = [
-    { label: 'Tổng ngân sách', value: formatVND(totalLimit), icon: 'wallet-cards', tone: 'primary' },
-    { label: 'Đã chi', value: formatVND(totalSpent), icon: 'arrow-up-circle', tone: 'danger' },
-    { label: 'Còn lại', value: formatVND(remaining), icon: 'piggy-bank', tone: 'success' },
-    { label: 'Vượt mức', value: overCount + ' danh mục', icon: 'alert-triangle', tone: 'warning' }
+    { label: t('budget.total'), value: formatVND(totalLimit), icon: 'wallet-cards', tone: 'primary' },
+    { label: t('budget.spent'), value: formatVND(totalSpent), icon: 'arrow-up-circle', tone: 'danger' },
+    { label: t('budget.remain'), value: formatVND(remaining), icon: 'piggy-bank', tone: 'success' },
+    { label: t('budget.over'), value: overCount + ' ' + t('budget.cat.count'), icon: 'alert-triangle', tone: 'warning' }
   ].map(s => `
     <div class="stat-card">
       <div class="stat-header">
@@ -41,7 +42,7 @@ function render() {
 
   const list = document.getElementById('b-list');
   if (budgets.length === 0) {
-    renderEmptyState(list, { icon: 'wallet-cards', title: 'Chưa có ngân sách nào', desc: 'Thiết lập ngân sách để kiểm soát chi tiêu hàng tháng.', ctaLabel: 'Thêm ngân sách', ctaAction: () => openBudgetModal() });
+    renderEmptyState(list, { icon: 'wallet-cards', title: t('budget.empty.title'), desc: t('budget.empty.desc'), ctaLabel: t('budget.add'), ctaAction: () => openBudgetModal() });
     return;
   }
 
@@ -55,7 +56,7 @@ function render() {
         <div class="b-head">
           <div class="b-icon" style="background:${cat?.color}22;color:${cat?.color}"><i data-lucide="${cat?.icon || 'circle'}"></i></div>
           <div class="b-name">${escapeHTML(cat?.name || '—')}</div>
-          <span class="tag tag-${tone}">${over ? 'Vượt' : Math.round(pct) + '%'}</span>
+          <span class="tag tag-${tone}">${over ? t('budget.over.short') : Math.round(pct) + '%'}</span>
         </div>
         <div class="b-amounts">
           <span class="spent">${formatVND(b.spent)}</span>
@@ -63,11 +64,11 @@ function render() {
         </div>
         <div class="progress progress-lg"><div class="progress-fill ${tone}" style="width:${pct}%"></div></div>
         <div class="b-status">
-          <span class="text-muted">Hàng tháng</span>
-          <span class="${over ? 'text-danger' : 'text-muted'}">${over ? 'Vượt ' + formatVND(b.spent - b.limit) : 'Còn ' + formatVND(b.limit - b.spent)}</span>
+          <span class="text-muted">${t('budget.monthly')}</span>
+          <span class="${over ? 'text-danger' : 'text-muted'}">${over ? t('budget.over.short') + ' ' + formatVND(b.spent - b.limit) : t('budget.remain.short') + ' ' + formatVND(b.limit - b.spent)}</span>
         </div>
         <div class="b-actions">
-          <button class="btn btn-secondary btn-sm" data-action="edit"><i data-lucide="pencil"></i>Sửa</button>
+          <button class="btn btn-secondary btn-sm" data-action="edit"><i data-lucide="pencil"></i>${t('common.edit')}</button>
           <button class="btn btn-ghost btn-sm" data-action="delete"><i data-lucide="trash-2"></i></button>
         </div>
       </div>
@@ -83,32 +84,33 @@ function openBudgetModal(existing) {
   const usedCatIds = new Set(getState().data.budgets.map(x => x.categoryId));
   const catOptions = expCats.map(c => {
     const used = !isEdit && usedCatIds.has(c.id);
-    return `<option value="${c.id}" ${c.id === b.categoryId ? 'selected' : ''} ${used ? 'disabled' : ''}>${escapeHTML(c.name)}${used ? ' (đã có)' : ''}</option>`;
+    return `<option value="${c.id}" ${c.id === b.categoryId ? 'selected' : ''} ${used ? 'disabled' : ''}>${escapeHTML(c.name)}${used ? ' ' + t('budget.cat.used') : ''}</option>`;
   }).join('');
   openModal({
-    title: isEdit ? 'Sửa ngân sách' : 'Thêm ngân sách',
+    title: isEdit ? t('budget.edit') : t('budget.add'),
     body: `
       <form id="bf">
         <div class="form-field">
-          <label class="form-label">Danh mục</label>
-          <select class="select" id="bf-cat" ${isEdit ? 'disabled' : ''}><option value="">Chọn danh mục</option>${catOptions}</select>
+          <label class="form-label">${t('common.category')}</label>
+          <select class="select" id="bf-cat" ${isEdit ? 'disabled' : ''}><option value="">${t('budget.cat.select')}</option>${catOptions}</select>
         </div>
         <div class="form-field">
-          <label class="form-label">Hạn mức/tháng (₫)</label>
-          <input class="input" type="number" min="0" step="10000" id="bf-limit" value="${b.limit || ''}" />
+          <label class="form-label">${t('budget.limit.month')} (${getCurrencySymbol()})</label>
+          <input class="input" type="number" min="0" step="any" id="bf-limit" value="${b.limit ? fromBaseVND(b.limit) : ''}" />
         </div>
       </form>
     `,
-    actions: `<button class="btn btn-secondary" data-close>Hủy</button><button class="btn btn-primary" id="bf-save">${isEdit ? 'Cập nhật' : 'Lưu'}</button>`
+    actions: `<button class="btn btn-secondary" data-close>${t('common.cancel')}</button><button class="btn btn-primary" id="bf-save">${isEdit ? t('common.update') : t('common.save')}</button>`
   });
   setTimeout(() => {
     document.getElementById('bf-save').addEventListener('click', () => {
       const cat = document.getElementById('bf-cat')?.value || b.categoryId;
-      const limit = parseFloat(document.getElementById('bf-limit').value);
-      if (!cat) return showToast('Chọn danh mục', 'error');
-      if (!limit || limit <= 0) return showToast('Nhập hạn mức hợp lệ', 'error');
-      if (isEdit) { updateBudget(existing.id, { limit }); showToast('Đã cập nhật ngân sách', 'success'); }
-      else { addBudget({ categoryId: cat, limit, period: 'monthly', startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString() }); showToast('Đã thêm ngân sách', 'success'); }
+      const limitInput = parseFloat(document.getElementById('bf-limit').value);
+      const limit = toBaseVND(limitInput);
+      if (!cat) return showToast(t('budget.toast.cat'), 'error');
+      if (!limit || limit <= 0) return showToast(t('budget.toast.invalid'), 'error');
+      if (isEdit) { updateBudget(existing.id, { limit }); showToast(t('budget.toast.updated'), 'success'); }
+      else { addBudget({ categoryId: cat, limit, period: 'monthly', startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString() }); showToast(t('budget.toast.added'), 'success'); }
       document.querySelector('.modal-backdrop')?.remove();
       render();
     });
@@ -123,11 +125,15 @@ document.getElementById('b-list').addEventListener('click', async (e) => {
   if (btn.dataset.action === 'edit') {
     openBudgetModal(getState().data.budgets.find(x => x.id === id));
   } else if (btn.dataset.action === 'delete') {
-    if (await confirmDialog('Xóa ngân sách này?', { danger: true, okText: 'Xóa' })) {
-      deleteBudget(id); showToast('Đã xóa', 'success'); render();
+    if (await confirmDialog(t('budget.confirm.delete'), { danger: true, okText: t('common.delete') })) {
+      deleteBudget(id); showToast(t('budget.toast.deleted'), 'success'); render();
     }
   }
 });
 
 render();
 mountIcons();
+
+// Re-render dynamic content on language/currency change so labels and amounts refresh
+window.addEventListener('lang-changed', render);
+window.addEventListener('currency-changed', render);

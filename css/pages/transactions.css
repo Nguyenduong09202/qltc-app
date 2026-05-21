@@ -1,4 +1,48 @@
 /* transactions.css */
+
+/* Compact filter bar: search full width, then 3 selects + 2 dates + reset on one row */
+.tx-filter-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 140px 140px auto;
+  grid-template-areas:
+    "search search search search search search"
+    "type cat wal from to reset";
+  gap: var(--s-2);
+  align-items: center;
+}
+.tx-filter-bar .search-input { grid-area: search; min-width: 0; flex: none; }
+.tx-filter-bar #f-type     { grid-area: type; min-width: 0; }
+.tx-filter-bar #f-category { grid-area: cat;  min-width: 0; }
+.tx-filter-bar #f-wallet   { grid-area: wal;  min-width: 0; }
+.tx-filter-bar #f-from     { grid-area: from; min-width: 0; }
+.tx-filter-bar #f-to       { grid-area: to;   min-width: 0; }
+.tx-filter-bar #f-reset    { grid-area: reset; justify-self: end; height: 40px; }
+.tx-filter-bar > * { min-width: 0 !important; }
+
+@media (max-width: 900px) {
+  .tx-filter-bar {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "search search"
+      "type cat"
+      "wal reset"
+      "from to";
+  }
+}
+@media (max-width: 480px) {
+  .tx-filter-bar {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "search"
+      "type"
+      "cat"
+      "wal"
+      "from"
+      "to"
+      "reset";
+  }
+}
+
 #tx-table tbody td { vertical-align: middle; }
 .tx-row-cat { display: flex; align-items: center; gap: var(--s-2); }
 .tx-row-cat .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }

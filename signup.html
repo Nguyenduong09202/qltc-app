@@ -4,8 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Đăng ký — QLTC</title>
-  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);var P={indigo:['#4F46E5','#4338CA'],emerald:['#10B981','#059669'],rose:['#E11D48','#BE123C'],amber:['#F59E0B','#D97706'],ocean:['#0EA5E9','#0284C7'],violet:['#8B5CF6','#7C3AED'],slate:['#475569','#334155']};var pk=localStorage.getItem('theme.preset')||'indigo';var c=pk==='custom'?(localStorage.getItem('theme.custom')||'#4F46E5'):(P[pk]?P[pk][0]:'#4F46E5');var h=pk==='custom'?c:(P[pk]?P[pk][1]:'#4338CA');var n=parseInt(c.slice(1),16);var r=(n>>16)&255,g=(n>>8)&255,b=n&255;document.documentElement.style.setProperty('--color-primary',c);document.documentElement.style.setProperty('--color-primary-hover',h);document.documentElement.style.setProperty('--color-primary-soft','rgba('+r+','+g+','+b+',0.12)');}catch(e){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4F46E5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="QLTC">
+  <link rel="apple-touch-icon" href="assets/images/brand.png">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages/auth.css">
@@ -28,37 +34,36 @@
     </aside>
     <main class="auth-main">
       <div class="auth-form">
-        <h1>Tạo tài khoản</h1>
+        <h1 data-i18n="auth.signup.title">Tạo tài khoản</h1>
         <p class="text-secondary" style="margin-bottom: var(--s-6);">Chỉ mất 30 giây — bắt đầu quản lý tài chính ngay.</p>
         <form id="signup-form">
           <div class="form-field">
-            <label class="form-label">Họ và tên</label>
+            <label class="form-label" data-i18n="auth.name">Họ và tên</label>
             <input class="input" id="name" placeholder="Nguyễn Văn A" required />
           </div>
           <div class="form-field">
-            <label class="form-label">Email</label>
+            <label class="form-label" data-i18n="auth.email">Email</label>
             <input class="input" id="email" type="email" placeholder="ban@example.com" required />
           </div>
           <div class="form-field">
-            <label class="form-label">Mật khẩu</label>
+            <label class="form-label" data-i18n="auth.password">Mật khẩu</label>
             <div class="pw-wrap">
               <input class="input" id="password" type="password" placeholder="Tối thiểu 6 ký tự" required minlength="6" />
               <button type="button" class="pw-toggle" id="pw-toggle"><i data-lucide="eye"></i></button>
             </div>
-            <span class="form-hint">Mật khẩu mạnh giúp bảo vệ tài khoản của bạn</span>
           </div>
-          <label class="flex" style="align-items:flex-start;gap:var(--s-2);font-size:var(--fs-sm);margin-bottom:var(--s-4);">
-            <input type="checkbox" required style="margin-top:3px;" />
-            <span>Tôi đồng ý với <span style="color:var(--color-primary);font-weight:600">Điều khoản dịch vụ</span> và <span style="color:var(--color-primary);font-weight:600">Chính sách bảo mật</span></span>
-          </label>
-          <button class="btn btn-primary btn-block btn-lg" type="submit">Tạo tài khoản</button>
+          <button class="btn btn-primary btn-block btn-lg" type="submit" data-i18n="auth.signup.cta">Tạo tài khoản</button>
           <p class="text-center text-secondary fs-sm" style="margin-top: var(--s-5);">
-            Đã có tài khoản? <a href="login.html" style="color:var(--color-primary);font-weight:600;">Đăng nhập</a>
+            <span data-i18n="auth.has.account">Đã có tài khoản?</span> <a href="login.html" style="color:var(--color-primary);font-weight:600;" data-i18n="auth.login.cta">Đăng nhập</a>
           </p>
         </form>
       </div>
     </main>
   </div>
   <script type="module" src="js/pages/signup.js"></script>
+  <script type="module">
+    import { applyLang } from './js/modules/i18n.js';
+    applyLang();
+  </script>
 </body>
 </html>

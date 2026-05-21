@@ -3,14 +3,15 @@ import { initStore, getState, getCategoryById, getWalletById, addWallet, updateW
 import { renderShell } from '../modules/shell.js';
 import { requireAuth } from '../modules/router.js';
 import { formatVND, formatSigned, formatDate, escapeHTML } from '../modules/format.js';
+import { getCurrencySymbol, toBaseVND, fromBaseVND, t } from '../modules/i18n.js';
 import { showToast, openModal, confirmDialog, renderEmptyState } from '../modules/ui.js';
 import { mountIcons } from '../modules/icons.js';
 
 initStore();
 if (!requireAuth()) {}
-renderShell({ activePage: 'accounts', title: 'Ví & Tài khoản' });
+renderShell({ activePage: 'accounts', title: t('acc.title') });
 
-const TYPE_LABEL = { cash: 'Tiền mặt', bank: 'Ngân hàng', 'e-wallet': 'Ví điện tử' };
+const TYPE_KEY = { cash: 'acc.type.cash', bank: 'acc.type.bank', 'e-wallet': 'acc.type.ewallet' };
 const ICONS = ['wallet','landmark','smartphone','credit-card','banknote','piggy-bank'];
 const COLORS = ['#4F46E5','#0EA5E9','#EC4899','#16A34A','#F59E0B','#8B5CF6'];
 
@@ -25,10 +26,10 @@ function render() {
     <div class="card" style="grid-column: 1/-1;">
       <div class="flex-between">
         <div>
-          <div class="text-muted fs-sm">Tổng số dư</div>
+          <div class="text-muted fs-sm">${t('acc.total.balance')}</div>
           <div style="font-size: var(--fs-3xl); font-weight: 700; color: var(--text-primary);">${formatVND(total)}</div>
         </div>
-        <div class="text-muted fs-sm">${wallets.length} ví</div>
+        <div class="text-muted fs-sm">${wallets.length} ${t('acc.wallets')}</div>
       </div>
     </div>
   ` + wallets.map(w => `
@@ -36,13 +37,13 @@ function render() {
       <div class="w-head">
         <div>
           <div class="w-name">${escapeHTML(w.name)}</div>
-          <div class="w-type">${TYPE_LABEL[w.type] || w.type}</div>
+          <div class="w-type">${TYPE_KEY[w.type] ? t(TYPE_KEY[w.type]) : w.type}</div>
         </div>
         <div class="w-icon"><i data-lucide="${w.icon}"></i></div>
       </div>
       <div class="w-balance">${formatVND(w.balance)}</div>
       <div class="w-actions">
-        <button class="btn btn-sm" data-action="edit"><i data-lucide="pencil"></i>Sửa</button>
+        <button class="btn btn-sm" data-action="edit"><i data-lucide="pencil"></i>${t('common.edit')}</button>
         <button class="btn btn-sm" data-action="delete"><i data-lucide="trash-2"></i></button>
       </div>
     </div>
@@ -60,7 +61,7 @@ function renderWalletTx() {
 
   const txs = getState().data.transactions.filter(t => t.walletId === activeWalletId).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 15);
   let txHtml;
-  if (txs.length === 0) txHtml = '<div class="empty-state"><div class="empty-icon"><i data-lucide="inbox"></i></div><h3>Chưa có giao dịch</h3></div>';
+  if (txs.length === 0) txHtml = '<div class="empty-state"><div class="empty-icon"><i data-lucide="inbox"></i></div><h3>' + t('acc.no.tx') + '</h3></div>';
   else txHtml = txs.map(t => {
     const cat = getCategoryById(t.categoryId);
     return `
@@ -84,38 +85,38 @@ function openWalletModal(existing) {
   const isEdit = !!existing;
   const w = existing || { name: '', type: 'cash', balance: 0, currency: 'VND', icon: 'wallet', color: COLORS[0] };
   openModal({
-    title: isEdit ? 'Sửa ví' : 'Thêm ví',
+    title: isEdit ? t('acc.modal.edit') : t('acc.modal.add'),
     body: `
       <div class="form-field">
-        <label class="form-label">Tên ví</label>
-        <input class="input" id="wf-name" value="${escapeHTML(w.name)}" placeholder="VD: Vietcombank chính" />
+        <label class="form-label">${t('acc.name')}</label>
+        <input class="input" id="wf-name" value="${escapeHTML(w.name)}" placeholder="${t('acc.name.placeholder')}" />
       </div>
       <div class="form-row">
         <div class="form-field">
-          <label class="form-label">Loại</label>
+          <label class="form-label">${t('acc.type')}</label>
           <select class="select" id="wf-type">
-            <option value="cash" ${w.type==='cash'?'selected':''}>Tiền mặt</option>
-            <option value="bank" ${w.type==='bank'?'selected':''}>Ngân hàng</option>
-            <option value="e-wallet" ${w.type==='e-wallet'?'selected':''}>Ví điện tử</option>
+            <option value="cash" ${w.type==='cash'?'selected':''}>${t('acc.type.cash')}</option>
+            <option value="bank" ${w.type==='bank'?'selected':''}>${t('acc.type.bank')}</option>
+            <option value="e-wallet" ${w.type==='e-wallet'?'selected':''}>${t('acc.type.ewallet')}</option>
           </select>
         </div>
         <div class="form-field">
-          <label class="form-label">Số dư ban đầu (₫)</label>
-          <input class="input" type="number" min="0" step="10000" id="wf-bal" value="${w.balance || 0}" ${isEdit ? 'disabled' : ''} />
+          <label class="form-label">${t('acc.initial')} (${getCurrencySymbol()})</label>
+          <input class="input" type="number" min="0" step="any" id="wf-bal" value="${w.balance ? fromBaseVND(w.balance) : 0}" ${isEdit ? 'disabled' : ''} />
         </div>
       </div>
       <div class="form-row">
         <div class="form-field">
-          <label class="form-label">Biểu tượng</label>
+          <label class="form-label">${t('common.icon')}</label>
           <select class="select" id="wf-icon">${ICONS.map(i => `<option value="${i}" ${i === w.icon ? 'selected' : ''}>${i}</option>`).join('')}</select>
         </div>
         <div class="form-field">
-          <label class="form-label">Màu</label>
+          <label class="form-label">${t('common.color')}</label>
           <select class="select" id="wf-color">${COLORS.map(c => `<option value="${c}" ${c === w.color ? 'selected' : ''}>${c}</option>`).join('')}</select>
         </div>
       </div>
     `,
-    actions: `<button class="btn btn-secondary" data-close>Hủy</button><button class="btn btn-primary" id="wf-save">${isEdit ? 'Cập nhật' : 'Lưu'}</button>`
+    actions: `<button class="btn btn-secondary" data-close>${t('common.cancel')}</button><button class="btn btn-primary" id="wf-save">${isEdit ? t('common.update') : t('common.save')}</button>`
   });
   setTimeout(() => {
     document.getElementById('wf-save').addEventListener('click', () => {
@@ -125,10 +126,10 @@ function openWalletModal(existing) {
         icon: document.getElementById('wf-icon').value,
         color: document.getElementById('wf-color').value
       };
-      if (!isEdit) data.balance = parseFloat(document.getElementById('wf-bal').value) || 0;
-      if (!data.name) return showToast('Nhập tên ví', 'error');
-      if (isEdit) { updateWallet(existing.id, data); showToast('Đã cập nhật', 'success'); }
-      else { addWallet({ ...data, currency: 'VND' }); showToast('Đã thêm ví', 'success'); }
+      if (!isEdit) data.balance = toBaseVND(parseFloat(document.getElementById('wf-bal').value) || 0);
+      if (!data.name) return showToast(t('acc.toast.empty.name'), 'error');
+      if (isEdit) { updateWallet(existing.id, data); showToast(t('budget.toast.updated'), 'success'); }
+      else { addWallet({ ...data, currency: 'VND' }); showToast(t('acc.toast.added'), 'success'); }
       document.querySelector('.modal-backdrop')?.remove();
       render();
     });
@@ -153,3 +154,5 @@ document.getElementById('wallet-list').addEventListener('click', async (e) => {
 
 render();
 mountIcons();
+window.addEventListener('lang-changed', render);
+window.addEventListener('currency-changed', render);
