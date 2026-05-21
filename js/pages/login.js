@@ -2,6 +2,26 @@
 import { initStore, getState, setAuth } from '../modules/store.js';
 import { showToast } from '../modules/ui.js';
 import { mountIcons } from '../modules/icons.js';
+import { t } from '../modules/i18n.js';
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function setError(fieldId, msgKey) {
+  const ff = document.getElementById('ff-' + fieldId);
+  const err = document.getElementById('err-' + fieldId);
+  if (!ff || !err) return;
+  if (msgKey) {
+    ff.classList.add('has-error');
+    err.textContent = t(msgKey);
+  } else {
+    ff.classList.remove('has-error');
+    err.textContent = '';
+  }
+}
+
+function clearErrors() {
+  ['email', 'password'].forEach(id => setError(id, null));
+}
 
 function bind() {
   try { initStore(); } catch (e) { console.error('[login] initStore failed', e); }
@@ -12,26 +32,38 @@ function bind() {
     return;
   }
 
+  const emailEl = document.getElementById('email');
+  const passEl = document.getElementById('password');
+
+  emailEl?.addEventListener('input', () => setError('email', null));
+  passEl?.addEventListener('input', () => setError('password', null));
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    clearErrors();
     try {
-      const email = document.getElementById('email').value.trim().toLowerCase();
-      const password = document.getElementById('password').value;
-      if (!email || !password) return showToast('Vui lòng nhập đầy đủ thông tin', 'error');
-      if (password.length < 6) return showToast('Mật khẩu phải có ít nhất 6 ký tự', 'error');
+      const email = emailEl.value.trim().toLowerCase();
+      const password = passEl.value;
+
+      let bad = false;
+      if (!email) { setError('email', 'auth.err.email.required'); bad = true; }
+      else if (!EMAIL_RE.test(email)) { setError('email', 'auth.err.email.invalid'); bad = true; }
+      if (!password) { setError('password', 'auth.err.password.required'); bad = true; }
+      else if (password.length < 6) { setError('password', 'auth.err.password.short'); bad = true; }
+      if (bad) return;
 
       const currentAuth = (getState() && getState().auth) || {};
       const users = Array.isArray(currentAuth.users) ? currentAuth.users : [];
       const registeredUser = users.find(u => u.email === email);
       if (!registeredUser) {
-        return showToast('Không tìm thấy tài khoản với email này. Hãy đăng ký.', 'error');
+        return setError('email', 'auth.err.account.notfound');
       }
       if (registeredUser.password !== password) {
-        return showToast('Mật khẩu không đúng', 'error');
+        return setError('password', 'auth.err.password.wrong');
       }
       const { password: _pw, ...user } = registeredUser;
       setAuth({ ...currentAuth, isLoggedIn: true, user, users });
-      showToast('Đăng nhập thành công, đang chuyển hướng...', 'success');
+      showToast(t('auth.ok.login'), 'success');
       setTimeout(() => { window.location.href = 'dashboard.html'; }, 700);
     } catch (err) {
       console.error('[login] submit failed', err);
@@ -48,6 +80,13 @@ function bind() {
       inp.type = isPwd ? 'text' : 'password';
       e.currentTarget.innerHTML = '<i data-lucide="' + (isPwd ? 'eye-off' : 'eye') + '"></i>';
       try { mountIcons(); } catch {}
+    });
+  }
+
+  const forgotBtn = document.getElementById('forgot-btn');
+  if (forgotBtn) {
+    forgotBtn.addEventListener('click', () => {
+      showToast(t('auth.forgot.toast'), 'info');
     });
   }
 

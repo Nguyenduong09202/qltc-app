@@ -106,6 +106,23 @@ export function renderShell({ activePage, title, subtitle = '' }) {
   body.insertBefore(wrap, body.firstChild);
   body.appendChild(backdrop);
 
+  // Mobile bottom navigation (5 primary destinations)
+  const BOTTOM_NAV = ['dashboard', 'transactions', 'budgets', 'reports', 'settings'];
+  const bottomNav = document.createElement('nav');
+  bottomNav.className = 'bottom-nav';
+  bottomNav.id = 'bottom-nav';
+  bottomNav.innerHTML = BOTTOM_NAV.map(key => {
+    const item = NAV.find(n => n.key === key);
+    if (!item) return '';
+    return `
+      <a href="${item.href}" class="bottom-nav-item ${key === activePage ? 'is-active' : ''}" aria-label="${t(item.i18n)}">
+        <i data-lucide="${item.icon}"></i>
+        <span data-i18n="${item.i18n}">${t(item.i18n)}</span>
+      </a>
+    `;
+  }).join('');
+  body.appendChild(bottomNav);
+
   mountIcons();
   bindShellEvents();
 

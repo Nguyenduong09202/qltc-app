@@ -73,16 +73,23 @@ function render() {
       <p>Hãy thêm giao dịch đầu tiên hoặc thay đổi bộ lọc.</p>
     </div></td></tr>`;
   } else {
-    tbody.innerHTML = slice.map(t => {
-      const cat = getCategoryById(t.categoryId);
-      const w = getWalletById(t.walletId);
+    const L = {
+      date: t('tx.col.date'),
+      note: t('tx.col.note'),
+      category: t('tx.col.category'),
+      wallet: t('tx.col.wallet'),
+      amount: t('tx.col.amount'),
+    };
+    tbody.innerHTML = slice.map(tx => {
+      const cat = getCategoryById(tx.categoryId);
+      const w = getWalletById(tx.walletId);
       return `
-        <tr data-id="${t.id}">
-          <td>${formatDate(t.date)}</td>
-          <td><div class="font-semibold">${escapeHTML(t.note || '—')}</div></td>
-          <td><div class="tx-row-cat"><span class="dot" style="background:${cat?.color || '#94A3B8'}"></span>${escapeHTML(cat?.name || '—')}</div></td>
-          <td>${escapeHTML(w?.name || '—')}</td>
-          <td class="text-right"><span class="tx-row-amount ${t.type}">${formatSigned(t.amount, t.type)}</span></td>
+        <tr data-id="${tx.id}">
+          <td data-label="${L.date}">${formatDate(tx.date)}</td>
+          <td data-label="${L.note}"><div class="font-semibold">${escapeHTML(tx.note || '—')}</div></td>
+          <td data-label="${L.category}"><div class="tx-row-cat"><span class="dot" style="background:${cat?.color || '#94A3B8'}"></span>${escapeHTML(cat?.name || '—')}</div></td>
+          <td data-label="${L.wallet}">${escapeHTML(w?.name || '—')}</td>
+          <td class="text-right" data-label="${L.amount}"><span class="tx-row-amount ${tx.type}">${formatSigned(tx.amount, tx.type)}</span></td>
           <td>
             <div class="row-actions">
               <button class="icon-btn" data-action="edit" aria-label="Sửa"><i data-lucide="pencil"></i></button>

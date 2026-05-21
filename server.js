@@ -8,6 +8,7 @@ const { execSync } = require('child_process');
 
 const PORT = parseInt(process.argv[2], 10) || 8000;
 const ROOT = __dirname;
+const SHOULD_OPEN_BROWSER = !process.argv.includes('--no-open');
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -62,13 +63,15 @@ server.listen(PORT, () => {
   console.log('  Nhan Ctrl+C de dung server');
   console.log('');
 
-  // Auto-open browser
-  try {
-    const cmd = process.platform === 'win32' ? `start "" "${url}"`
-              : process.platform === 'darwin' ? `open "${url}"`
-              : `xdg-open "${url}"`;
-    execSync(cmd, { stdio: 'ignore' });
-  } catch {}
+  if (SHOULD_OPEN_BROWSER) {
+    // Auto-open browser
+    try {
+      const cmd = process.platform === 'win32' ? `start "" "${url}"`
+                : process.platform === 'darwin' ? `open "${url}"`
+                : `xdg-open "${url}"`;
+      execSync(cmd, { stdio: 'ignore' });
+    } catch {}
+  }
 });
 
 server.on('error', (err) => {

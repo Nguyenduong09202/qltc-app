@@ -231,6 +231,39 @@
 }
 .hamburger { display: none; }
 
+/* Bottom navigation (mobile only) */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-default);
+  z-index: 12;
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+}
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 4px 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 500;
+  text-decoration: none;
+  min-height: 56px;
+  transition: color var(--t-fast);
+}
+.bottom-nav-item [data-lucide],
+.bottom-nav-item svg { width: 22px; height: 22px; }
+.bottom-nav-item:hover { color: var(--text-secondary); }
+.bottom-nav-item.is-active { color: var(--color-primary); }
+.bottom-nav-item.is-active [data-lucide],
+.bottom-nav-item.is-active svg { stroke-width: 2.4; }
+
 /* Main */
 .app-main {
   grid-area: main;
@@ -298,14 +331,35 @@
   }
   .sidebar-backdrop.is-open { opacity: 1; pointer-events: auto; }
   .hamburger { display: grid; }
-  .app-main { padding: var(--s-4); }
+  .app-main {
+    padding: var(--s-4);
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .bottom-nav { display: flex; }
+  /* Stack page header on mobile */
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--s-3);
+  }
+  .page-header > .flex {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .page-header > .flex > .btn { flex: 1 1 0; min-width: 0; justify-content: center; }
+  .page-header > .btn { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 480px) {
+  .app { --topbar-h: 56px; }
   .app-topbar { padding: 0 var(--s-3); gap: var(--s-2); }
   .topbar-search { display: none; }
   .topbar-title { font-size: var(--fs-lg); }
-  .app-main { padding: var(--s-3); }
+  .topbar-actions { gap: var(--s-1); }
+  /* Hide low-priority topbar buttons to free space; keep theme + lang + avatar */
+  .topbar-actions .icon-btn[aria-label="Thông báo"],
+  .topbar-actions #pwa-install-btn { display: none; }
+  .app-main { padding: var(--s-3); padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
   .page-header h1 { font-size: var(--fs-xl); }
 }

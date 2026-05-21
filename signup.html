@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Đăng ký — QLTC</title>
+  <title data-i18n="auth.signup.doctitle">Đăng ký — QLTC</title>
   <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);var P={indigo:['#4F46E5','#4338CA'],emerald:['#10B981','#059669'],rose:['#E11D48','#BE123C'],amber:['#F59E0B','#D97706'],ocean:['#0EA5E9','#0284C7'],violet:['#8B5CF6','#7C3AED'],slate:['#475569','#334155']};var pk=localStorage.getItem('theme.preset')||'indigo';var c=pk==='custom'?(localStorage.getItem('theme.custom')||'#4F46E5'):(P[pk]?P[pk][0]:'#4F46E5');var h=pk==='custom'?c:(P[pk]?P[pk][1]:'#4338CA');var n=parseInt(c.slice(1),16);var r=(n>>16)&255,g=(n>>8)&255,b=n&255;document.documentElement.style.setProperty('--color-primary',c);document.documentElement.style.setProperty('--color-primary-hover',h);document.documentElement.style.setProperty('--color-primary-soft','rgba('+r+','+g+','+b+',0.12)');}catch(e){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="manifest" href="manifest.json">
@@ -18,39 +18,48 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.453.0/dist/umd/lucide.min.js"></script>
 </head>
 <body class="auth-body">
+  <div class="auth-topbar"><div class="lang-switch" id="lang-switch"></div></div>
   <div class="auth-wrap">
     <aside class="auth-side">
       <a href="index.html" class="ld-brand"><img class="brand-full" src="assets/images/brand.png" alt="QLTC" onload="this.parentElement.classList.add('has-brand-full')" onerror="this.remove()" /><span class="brand-mark">₫</span><span class="brand-text">QLTC</span></a>
       <div class="auth-quote">
-        <h2>Bắt đầu hành trình<br>tài chính của bạn.</h2>
-        <p>Miễn phí mãi mãi. Không thẻ tín dụng. Không quảng cáo.</p>
+        <h2 data-i18n="auth.side.signup.h" data-i18n-html="true">Bắt đầu hành trình<br>tài chính của bạn.</h2>
+        <p data-i18n="auth.side.signup.p">Miễn phí mãi mãi. Không thẻ tín dụng. Không quảng cáo.</p>
       </div>
       <ul class="check-list">
-        <li><i data-lucide="check-circle"></i>Theo dõi không giới hạn giao dịch</li>
-        <li><i data-lucide="check-circle"></i>Đặt mục tiêu & ngân sách</li>
-        <li><i data-lucide="check-circle"></i>Báo cáo trực quan</li>
-        <li><i data-lucide="check-circle"></i>Dữ liệu lưu cục bộ, riêng tư tuyệt đối</li>
+        <li><i data-lucide="check-circle"></i><span data-i18n="auth.side.check.1">Theo dõi không giới hạn giao dịch</span></li>
+        <li><i data-lucide="check-circle"></i><span data-i18n="auth.side.check.2">Đặt mục tiêu & ngân sách</span></li>
+        <li><i data-lucide="check-circle"></i><span data-i18n="auth.side.check.3">Báo cáo trực quan</span></li>
+        <li><i data-lucide="check-circle"></i><span data-i18n="auth.side.check.4">Dữ liệu lưu cục bộ, riêng tư tuyệt đối</span></li>
       </ul>
     </aside>
     <main class="auth-main">
       <div class="auth-form">
         <h1 data-i18n="auth.signup.title">Tạo tài khoản</h1>
-        <p class="text-secondary" style="margin-bottom: var(--s-6);">Chỉ mất 30 giây — bắt đầu quản lý tài chính ngay.</p>
-        <form id="signup-form">
-          <div class="form-field">
-            <label class="form-label" data-i18n="auth.name">Họ và tên</label>
-            <input class="input" id="name" placeholder="Nguyễn Văn A" required />
+        <p class="text-secondary" style="margin-bottom: var(--s-6);" data-i18n="auth.signup.fast">Chỉ mất 30 giây — bắt đầu quản lý tài chính ngay.</p>
+        <form id="signup-form" novalidate>
+          <div class="form-field" id="ff-name">
+            <label class="form-label" for="name" data-i18n="auth.name">Họ và tên</label>
+            <input class="input" id="name" name="name" autocomplete="name" placeholder="Nguyễn Văn A" required data-i18n-attr="placeholder" data-i18n-key="auth.name.placeholder" autofocus />
+            <span class="field-error" id="err-name"></span>
           </div>
-          <div class="form-field">
-            <label class="form-label" data-i18n="auth.email">Email</label>
-            <input class="input" id="email" type="email" placeholder="ban@example.com" required />
+          <div class="form-field" id="ff-email">
+            <label class="form-label" for="email" data-i18n="auth.email">Email</label>
+            <input class="input" id="email" name="email" type="email" autocomplete="email" placeholder="ban@example.com" required />
+            <span class="field-error" id="err-email"></span>
           </div>
-          <div class="form-field">
-            <label class="form-label" data-i18n="auth.password">Mật khẩu</label>
+          <div class="form-field" id="ff-password">
+            <label class="form-label" for="password" data-i18n="auth.password">Mật khẩu</label>
             <div class="pw-wrap">
-              <input class="input" id="password" type="password" placeholder="Tối thiểu 6 ký tự" required minlength="6" />
-              <button type="button" class="pw-toggle" id="pw-toggle"><i data-lucide="eye"></i></button>
+              <input class="input" id="password" name="password" type="password" autocomplete="new-password" placeholder="Tối thiểu 6 ký tự" required minlength="6" data-i18n-attr="placeholder" data-i18n-key="auth.pw.placeholder" />
+              <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Hiện mật khẩu" data-i18n-attr="aria-label" data-i18n-key="auth.pw.show"><i data-lucide="eye"></i></button>
             </div>
+            <span class="field-error" id="err-password"></span>
+          </div>
+          <div class="form-field" id="ff-confirm">
+            <label class="form-label" for="confirm" data-i18n="auth.confirm">Xác nhận mật khẩu</label>
+            <input class="input" id="confirm" name="confirm" type="password" autocomplete="new-password" placeholder="Nhập lại mật khẩu" required minlength="6" data-i18n-attr="placeholder" data-i18n-key="auth.confirm.placeholder" />
+            <span class="field-error" id="err-confirm"></span>
           </div>
           <button class="btn btn-primary btn-block btn-lg" type="submit" data-i18n="auth.signup.cta">Tạo tài khoản</button>
           <p class="text-center text-secondary fs-sm" style="margin-top: var(--s-5);">
@@ -62,7 +71,8 @@
   </div>
   <script type="module" src="js/pages/signup.js"></script>
   <script type="module">
-    import { applyLang } from './js/modules/i18n.js';
+    import { applyLang, mountLangSwitch } from './js/modules/i18n.js';
+    mountLangSwitch(document.getElementById('lang-switch'));
     applyLang();
   </script>
 </body>

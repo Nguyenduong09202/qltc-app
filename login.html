@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Đăng nhập — QLTC</title>
+  <title data-i18n="auth.login.doctitle">Đăng nhập — QLTC</title>
   <script>(function(){try{var t=localStorage.getItem('theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);var P={indigo:['#4F46E5','#4338CA'],emerald:['#10B981','#059669'],rose:['#E11D48','#BE123C'],amber:['#F59E0B','#D97706'],ocean:['#0EA5E9','#0284C7'],violet:['#8B5CF6','#7C3AED'],slate:['#475569','#334155']};var pk=localStorage.getItem('theme.preset')||'indigo';var c=pk==='custom'?(localStorage.getItem('theme.custom')||'#4F46E5'):(P[pk]?P[pk][0]:'#4F46E5');var h=pk==='custom'?c:(P[pk]?P[pk][1]:'#4338CA');var n=parseInt(c.slice(1),16);var r=(n>>16)&255,g=(n>>8)&255,b=n&255;document.documentElement.style.setProperty('--color-primary',c);document.documentElement.style.setProperty('--color-primary-hover',h);document.documentElement.style.setProperty('--color-primary-soft','rgba('+r+','+g+','+b+',0.12)');}catch(e){}})();</script>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="manifest" href="manifest.json">
@@ -18,16 +18,17 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.453.0/dist/umd/lucide.min.js"></script>
 </head>
 <body class="auth-body">
+  <div class="auth-topbar"><div class="lang-switch" id="lang-switch"></div></div>
   <div class="auth-wrap">
     <aside class="auth-side">
       <a href="index.html" class="ld-brand"><img class="brand-full" src="assets/images/brand.png" alt="QLTC" onload="this.parentElement.classList.add('has-brand-full')" onerror="this.remove()" /><span class="brand-mark">₫</span><span class="brand-text">QLTC</span></a>
       <div class="auth-quote">
-        <h2>Tài chính khỏe mạnh<br>bắt đầu từ thói quen.</h2>
-        <p>Ghi chép mỗi ngày, đặt mục tiêu mỗi tháng, đạt được tự do tài chính từng năm.</p>
+        <h2 data-i18n="auth.side.login.h" data-i18n-html="true">Tài chính khỏe mạnh<br>bắt đầu từ thói quen.</h2>
+        <p data-i18n="auth.side.login.p">Ghi chép mỗi ngày, đặt mục tiêu mỗi tháng, đạt được tự do tài chính từng năm.</p>
       </div>
       <div class="auth-side-deco">
         <div class="deco-card">
-          <div class="text-muted fs-sm">Tiết kiệm tháng này</div>
+          <div class="text-muted fs-sm" data-i18n="auth.side.saving">Tiết kiệm tháng này</div>
           <div style="font-size:var(--fs-2xl);font-weight:700;color:var(--color-success)">+ 4.250.000 ₫</div>
         </div>
       </div>
@@ -35,22 +36,27 @@
     <main class="auth-main">
       <div class="auth-form">
         <h1 data-i18n="auth.login.title">Đăng nhập</h1>
-        <p class="text-secondary" style="margin-bottom: var(--s-6);">Chào mừng trở lại! Hãy đăng nhập để tiếp tục.</p>
-        <form id="login-form">
-          <div class="form-field">
-            <label class="form-label" data-i18n="auth.email">Email</label>
-            <input class="input" id="email" type="email" placeholder="ban@example.com" required />
+        <p class="text-secondary" style="margin-bottom: var(--s-6);" data-i18n="auth.login.welcome">Chào mừng trở lại! Hãy đăng nhập để tiếp tục.</p>
+        <form id="login-form" novalidate>
+          <div class="form-field" id="ff-email">
+            <label class="form-label" for="email" data-i18n="auth.email">Email</label>
+            <input class="input" id="email" name="email" type="email" autocomplete="email" placeholder="ban@example.com" required autofocus />
+            <span class="field-error" id="err-email"></span>
           </div>
-          <div class="form-field">
-            <label class="form-label" data-i18n="auth.password">Mật khẩu</label>
-            <div class="pw-wrap">
-              <input class="input" id="password" type="password" placeholder="••••••••" required minlength="6" />
-              <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Hiện mật khẩu"><i data-lucide="eye"></i></button>
+          <div class="form-field" id="ff-password">
+            <div class="pw-row">
+              <label class="form-label" for="password" data-i18n="auth.password">Mật khẩu</label>
+              <button type="button" class="forgot-link" id="forgot-btn" data-i18n="auth.forgot">Quên mật khẩu?</button>
             </div>
+            <div class="pw-wrap">
+              <input class="input" id="password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required minlength="6" />
+              <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Hiện mật khẩu" data-i18n-attr="aria-label" data-i18n-key="auth.pw.show"><i data-lucide="eye"></i></button>
+            </div>
+            <span class="field-error" id="err-password"></span>
           </div>
           <button class="btn btn-primary btn-block btn-lg" type="submit" data-i18n="auth.login.cta">Đăng nhập</button>
           <p class="text-center text-secondary fs-sm" style="margin-top: var(--s-5);">
-            <span data-i18n="auth.no.account">Chưa có tài khoản?</span> <a href="signup.html" style="color:var(--color-primary);font-weight:600;" data-i18n="auth.signup.cta">Đăng ký miễn phí</a>
+            <span data-i18n="auth.no.account">Chưa có tài khoản?</span> <a href="signup.html" style="color:var(--color-primary);font-weight:600;" data-i18n="auth.signup.free">Đăng ký miễn phí</a>
           </p>
         </form>
       </div>
@@ -58,7 +64,8 @@
   </div>
   <script type="module" src="js/pages/login.js"></script>
   <script type="module">
-    import { applyLang } from './js/modules/i18n.js';
+    import { applyLang, mountLangSwitch } from './js/modules/i18n.js';
+    mountLangSwitch(document.getElementById('lang-switch'));
     applyLang();
   </script>
 </body>
